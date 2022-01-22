@@ -48,12 +48,12 @@ var schema = new mongoose.Schema({
         type: String,
         default: null
     },
-    certification: {
-        type: String, //multiple upload
+    profileImage: {
+        type:String,  //single upload
         default: null
     },
-    photo: {
-        type:String,  //single upload
+    certification: {
+        type: [], //multiple upload
         default: null
     },
     signature: {

@@ -179,20 +179,51 @@ module.exports = {
     //update Users by ID
     async updateUserById(req, res) {
         try {
-            const checkID = await userModel.findOne({ _id: req.params.id});
-            if (!checkID) {
+            let certificationArray= []; 
+            req.files.certification.forEach(imagePath => {
+                certificationArray.push(imagePath.path)
+            });
+            //console.log('imagggggggg', certificationArray)
+
+            const userID = await userModel.findById({ _id: req.params.id});
+            if (!userID) {
                 return res.status(500).json({ error: "User ID is invalid!" })
             }
+            // if(userID.profileImage != null){
+            //     fs.unlink('./' + userID.profileImage, function (err) {
+            //         if (err) throw err;
+            //         // if no error, file has been deleted successfully
+            //         console.log('File deleted!');
+            //     });
+            // } else if (userID.certification != null){
+            //     fs.unlink('./' + userID.certification, function (err) {
+            //         if (err) throw err;
+            //         // if no error, file has been deleted successfully
+            //         console.log('File deleted!');
+            //     });
+            // } else if(userID.signature != null){
+            //     fs.unlink('./' + userID.signature, function (err) {
+            //         if (err) throw err;
+            //         // if no error, file has been deleted successfully
+            //         console.log('File deleted!');
+            //     });
+            // }
             const body = req.body;
+            const profile= req.files.profileImage[0].path;
+            //const certificates =  req.files.certification[0].path;
+            const certificates =  certificationArray;
+            const sign = req.files.signature[0].path;
+
             const updatedUser = await userModel.findByIdAndUpdate(
                 { _id: req.params.id, },
-                { $set: { firstName: body.firstName, lastName: body.lastName, phone: body.phone, specialization: body.specialization, experience: body.experience, dob: body.dob, city: body.city, zipCode: body.zipCode, country: body.country } },
+                { $set: { firstName: body.firstName, lastName: body.lastName, phone: body.phone, specialization: body.specialization, experience: body.experience, dob: body.dob, city: body.city, zipCode: body.zipCode, country: body.country, profileImage: profile, certification : certificates, signature: sign } },
                 { new: true }
             );
             res.status(200).json({
                 message : "User Records Updated Successfully!",
                 data: updatedUser
             });
+      
         } catch (error) {
             res.status(500).send(error.message);
         }

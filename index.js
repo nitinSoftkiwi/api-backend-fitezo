@@ -30,6 +30,11 @@ app.use(express.json()); //for body parser
 //cors 
 app.use(cors());
 
+// Files upload folder
+const path = require('path')
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+
+
 //route middlewares
 app.use('/api', userRoutes);
 
