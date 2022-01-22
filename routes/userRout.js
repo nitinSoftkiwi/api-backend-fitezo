@@ -18,7 +18,7 @@ const mediaFilter = (req, file, cb) => {
   } else { cb(null, false)}
 }
 
-const fileUpload = multer({ storage: storage, fileFilter: mediaFilter }).fields([{name: "profileImage", maxCount: 1}, {name: "certification", maxCount: 5}, {name: "signature", maxCount: 1}]);
+const fileUpload = multer({ storage: storage }).fields([{name: "profileImage", maxCount: 1}, {name: "certification", maxCount: 5}, {name: "signature", maxCount: 1}]);
 
 
 router.post('/create', userController.create); //Create Users
