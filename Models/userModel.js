@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 const { stringify } = require('nodemon/lib/utils');
 
 var schema = new mongoose.Schema({
+  
     email: {
         type: String,
         required: true,
@@ -23,34 +24,44 @@ var schema = new mongoose.Schema({
         type: String,
         require: true
     },
-    dateOfBirth: {
+    dob: {
         type: String,
-        require: true
+        default: null
     },
-    yearOfExperience: {
+    city:{
         type: String,
-        require: true
+        default: null
     },
-    userName: {
+    zipCode:{
         type: String,
-        require: true
+        default: null
     },
-    address: [{
-        city:{
-            type: String,
-            require: true
-        },
-        zipCode:{
-            type: String,
-            require: true
-        },
-        country: {
-            type: String,
-            require: true
-        }
+    country: {
+        type: String,
+        default: null
+    },
+    experience: {
+        type: String,
+        default: null
+    },
+    specialization: {
+        type: String,
+        default: null
+    },
+    certification: {
+        type: String, //multiple upload
+        default: null
+    },
+    photo: {
+        type:String,  //single upload
+        default: null
+    },
+    signature: {
+        type: String,  //single upload
+        default: null
+    },
 
-    }],
-    personalTrainer: [{
+    trainer: [{
 
         specialization: {
             type: String,
@@ -98,13 +109,12 @@ var schema = new mongoose.Schema({
         type: String,
         default: 'user'
     },
-    token: { type: String },
     status: {
         type: Number,
         default: 0 // status 0 is Active and 1 is Inactive
     },
-
-
+    token: { type: String },
+   
 }, { timestamps: true });
 
 
