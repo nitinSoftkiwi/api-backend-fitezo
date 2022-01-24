@@ -189,27 +189,31 @@ module.exports = {
             if (!userID) {
                 return res.status(500).json({ error: "User ID is invalid!" })
             }
-            // if(userID.profileImage != null){
-            //     fs.unlink('./' + userID.profileImage, function (err) {
-            //         if (err) throw err;
-            //         // if no error, file has been deleted successfully
-            //         console.log('File deleted!');
-            //     });
-            // } 
-            // if (userID.certification != null){
-            //     fs.unlink('./' + userID.certification, function (err) {
-            //         if (err) throw err;
-            //         // if no error, file has been deleted successfully
-            //         console.log('File deleted!');
-            //     });
-            // }
-            // if(userID.signature != null){
-            //     fs.unlink('./' + userID.signature, function (err) {
-            //         if (err) throw err;
-            //         // if no error, file has been deleted successfully
-            //         console.log('File deleted!');
-            //     });
-            // }
+            if(userID.profileImage != null){
+                fs.unlink('./' + userID.profileImage, function (err) {
+                    if (err) throw err;
+                    // if no error, file has been deleted successfully
+                    console.log('File deleted!');
+                });
+            } 
+            if (userID.certification != null){
+               // console.log("PPPPPPPPPPPP:::::::::::::::" , userID.certification)
+                userID.certification.forEach(data => {
+                    fs.unlink('./' + data, function (err) {
+                        if (err) throw err;
+                        // if no error, file has been deleted successfully
+                        console.log('File deleted!::::::::::');
+                    });
+                });
+                
+            }
+            if(userID.signature != null){
+                fs.unlink('./' + userID.signature, function (err) {
+                    if (err) throw err;
+                    // if no error, file has been deleted successfully
+                    console.log('File deleted!');
+                });
+            }
             const body = req.body;
             const profile= req.files.profileImage[0].path;
             //const certificates =  req.files.certification[0].path;
@@ -233,20 +237,54 @@ module.exports = {
     //Update Users
     async updateUser(req, res) {
         try {
-            const checkID = await userModel.findById(req.auth.id);
-            if (!checkID) {
+            let certificationArray= []; 
+            req.files.certification.forEach(imagePath => {
+                certificationArray.push(imagePath.path)
+            });
+
+            const userID = await userModel.findById(req.auth.id);
+            
+            if (!userID) {
                 return res.status(500).json({ error: "User ID is invalid!" })
             }
+
+            if(userID.profileImage != null){
+                fs.unlink('./' + userID.profileImage, function (err) {
+                    if (err) throw err;
+                    console.log('File deleted!');
+                });
+            } 
+            if (userID.certification != null){
+                userID.certification.forEach(data => {
+                    fs.unlink('./' + data, function (err) {
+                        if (err) throw err;
+                         console.log('File deleted!');
+                    });
+                });
+                
+            }
+            if(userID.signature != null){
+                fs.unlink('./' + userID.signature, function (err) {
+                    if (err) throw err;
+                    console.log('File deleted!');
+                });
+            }
             const body = req.body;
+            const profile= req.files.profileImage[0].path;
+            //const certificates =  req.files.certification[0].path;
+            const certificates =  certificationArray;
+            const sign = req.files.signature[0].path;
+
             const updatedUser = await userModel.findByIdAndUpdate(
-                { _id: req.auth.id },
-                { $set: { firstName: body.firstName, lastName: body.lastName, phone: body.phone, specialization: body.specialization, experience: body.experience, dob: body.dob, city: body.city, zipCode: body.zipCode, country: body.country } },
+                { _id: req.auth.id, },
+                { $set: { firstName: body.firstName, lastName: body.lastName, phone: body.phone, specialization: body.specialization, experience: body.experience, dob: body.dob, city: body.city, zipCode: body.zipCode, country: body.country, profileImage: profile, certification : certificates, signature: sign } },
                 { new: true }
             );
             res.status(200).json({
                 message : "User Records Updated Successfully!",
                 data: updatedUser
             });
+      
         } catch (error) {
             res.status(500).send(error.message);
         }

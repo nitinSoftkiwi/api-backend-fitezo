@@ -27,7 +27,7 @@ router.get('/get', userController.getAllUser); //Get All User with pagination
 router.get('/get/:id', userController.getUserById); //Get User By ID
 router.get('/getUser', userController.getUser); //Get User By ID
 router.put('/updateById/:id', fileUpload, userController.updateUserById); //Update User By ID
-router.put('/updateUser', userController.updateUser); //Update User
+router.put('/updateUser', fileUpload, userController.updateUser); //Update User
 router.get('/getCountByType', userController.getCountByType); //Get User Count
 router.get('/search/:id', userController.userSearch); //Get User Count
 
