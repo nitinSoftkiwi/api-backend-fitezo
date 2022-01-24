@@ -26,7 +26,8 @@ router.post('/login', userController.login); //Login
 router.get('/get', userController.getAllUser); //Get All User with pagination
 router.get('/get/:id', userController.getUserById); //Get User By ID
 router.get('/getUser', userController.getUser); //Get User By ID
-router.put('/updatebyid/:id', fileUpload, userController.updateUserById); //Update User By ID
+router.put('/updateById/:id', fileUpload, userController.updateUserById); //Update User By ID
 router.put('/updateUser', userController.updateUser); //Update User
+router.get('/getCountByType', userController.getCountByType); //Update User
 
 module.exports = router;

@@ -195,13 +195,15 @@ module.exports = {
             //         // if no error, file has been deleted successfully
             //         console.log('File deleted!');
             //     });
-            // } else if (userID.certification != null){
+            // } 
+            // if (userID.certification != null){
             //     fs.unlink('./' + userID.certification, function (err) {
             //         if (err) throw err;
             //         // if no error, file has been deleted successfully
             //         console.log('File deleted!');
             //     });
-            // } else if(userID.signature != null){
+            // }
+            // if(userID.signature != null){
             //     fs.unlink('./' + userID.signature, function (err) {
             //         if (err) throw err;
             //         // if no error, file has been deleted successfully
@@ -249,7 +251,16 @@ module.exports = {
             res.status(500).send(error.message);
         }
     },
-
+    //Get Users Count By Type
+    async getCountByType(req, res) {
+        try {
+            const typeObje = {userType: req.query.userType};
+            const total = await userModel.find(typeObje).count();
+            res.status(200).send({message: "Total User Count!", data: total})
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    }
       
 }
 
