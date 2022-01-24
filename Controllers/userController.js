@@ -256,7 +256,7 @@ module.exports = {
         try {
             const typeObje = {userType: req.query.userType};
             const total = await userModel.find(typeObje).count();
-            res.status(200).send({message: "Total User Count!", data: total})
+            res.status(200).send({message: "Total User Counts!", data: total})
         } catch (error) {
             res.status(500).send(error.message);
         }
