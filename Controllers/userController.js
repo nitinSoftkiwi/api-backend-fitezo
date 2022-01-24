@@ -260,8 +260,29 @@ module.exports = {
         } catch (error) {
             res.status(500).send(error.message);
         }
-    }
-      
+    },
+    //Search User Date
+    async userSearch(req, res) {
+        try {
+            const data = req.params.id;
+            const regex = new RegExp(data, 'i')
+            const condition = {$or : [
+                {firstName : {$regex: regex}},
+                {lastName : {$regex: regex}},
+                {phone : {$regex: regex}},
+                {email : {$regex: regex}},
+                {experience : {$regex: regex}},
+                {specialization : {$regex: regex}}
+            ]}
+            const queryData = await userModel.find(condition);
+            if(!queryData) {
+                return res.status(400).send('Error, No Data Found...!')
+            }
+            return res.status(200).send({message: "Search Data Got Successfully!", data: queryData})
+        } catch (error) {
+           res.status(500).send(error.message);
+        }
+    },
 }
 
-userModel.findOne({}).then(user => console.log('User', user));
+//userModel.findOne({}).then(user => console.log('User', user));
