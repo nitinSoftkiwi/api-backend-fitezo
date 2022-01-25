@@ -179,25 +179,26 @@ module.exports = {
     //update Users by ID
     async updateUserById(req, res) {
         try {
+            
             let certificationArray= []; 
-            req.files.certification.forEach(imagePath => {
-                certificationArray.push(imagePath.path)
-            });
-            //console.log('imagggggggg', certificationArray)
-
+            if(req.files.certification){
+                req.files.certification.forEach(imagePath => {
+                    certificationArray.push(imagePath.path)
+                });
+            }
             const userID = await userModel.findById({ _id: req.params.id});
             if (!userID) {
                 return res.status(500).json({ error: "User ID is invalid!" })
             }
-            if(userID.profileImage != null){
+            
+            if(userID.profileImage != null && req.files.profileImage){
                 fs.unlink('./' + userID.profileImage, function (err) {
                     if (err) throw err;
                     // if no error, file has been deleted successfully
                     console.log('File deleted!');
                 });
             } 
-            if (userID.certification != null){
-               // console.log("PPPPPPPPPPPP:::::::::::::::" , userID.certification)
+            if (userID.certification != null && req.files.certification){
                 userID.certification.forEach(data => {
                     fs.unlink('./' + data, function (err) {
                         if (err) throw err;
@@ -207,7 +208,7 @@ module.exports = {
                 });
                 
             }
-            if(userID.signature != null){
+            if(userID.signature != null && req.files.signature){
                 fs.unlink('./' + userID.signature, function (err) {
                     if (err) throw err;
                     // if no error, file has been deleted successfully
@@ -215,13 +216,28 @@ module.exports = {
                 });
             }
             const body = req.body;
-            const profile= req.files.profileImage[0].path;
-            //const certificates =  req.files.certification[0].path;
-            const certificates =  certificationArray;
-            const sign = req.files.signature[0].path;
-
+            const profile = req.files.profileImage ? req.files.profileImage[0].path : userID.profile;
+            const certificates =  req.files.certification ? certificationArray : userID.certification;
+            const sign = req.files.signature ? req.files.signature[0].path : userID.signature ;
+            // console.log("dsfasdfsadf:::::", profile, sign)
+            // const bodyData = {
+            //     firstName : body.firstName ? body.firstName : userModel.firstName,
+            //     lastName: body.lastName ? body.lastName : userModel.lastName,
+            //     phone: body.phone ? body.phone : userModel.phone, 
+            //     specialization: body.specialization ? body.specialization : userModel.specialization, 
+            //     experience: body.experience ? body.experience : userModel.experience,
+            //     dob: body.dob ? body.dob : userModel.dob,
+            //     city: body.city ? body.city : userModel.city,
+            //     zipCode: body.zipCode ? body.zipCode : userModel.zipCode, 
+            //     country: body.country ? body.country : userModel.country,
+            //     profileImage: body.profile ? body.profile : userModel.profileImage,
+            //     certification: body.certificates ? body.certificates : userModel.certification, 
+            //     signature: body.sign ? body.sign : userModel.signature
+                
+            // }
             const updatedUser = await userModel.findByIdAndUpdate(
                 { _id: req.params.id, },
+               // { $set: bodyData},
                 { $set: { firstName: body.firstName, lastName: body.lastName, phone: body.phone, specialization: body.specialization, experience: body.experience, dob: body.dob, city: body.city, zipCode: body.zipCode, country: body.country, profileImage: profile, certification : certificates, signature: sign } },
                 { new: true }
             );
@@ -238,43 +254,46 @@ module.exports = {
     async updateUser(req, res) {
         try {
             let certificationArray= []; 
-            req.files.certification.forEach(imagePath => {
-                certificationArray.push(imagePath.path)
-            });
+            if(req.files.certification){
+                req.files.certification.forEach(imagePath => {
+                    certificationArray.push(imagePath.path)
+                });
+            }
 
             const userID = await userModel.findById(req.auth.id);
-            
             if (!userID) {
                 return res.status(500).json({ error: "User ID is invalid!" })
             }
 
-            if(userID.profileImage != null){
+            if(userID.profileImage != null && req.files.profileImage){
                 fs.unlink('./' + userID.profileImage, function (err) {
                     if (err) throw err;
+                    // if no error, file has been deleted successfully
                     console.log('File deleted!');
                 });
             } 
-            if (userID.certification != null){
+            if (userID.certification != null && req.files.certification){
                 userID.certification.forEach(data => {
                     fs.unlink('./' + data, function (err) {
                         if (err) throw err;
-                         console.log('File deleted!');
+                        // if no error, file has been deleted successfully
+                        console.log('File deleted!::::::::::');
                     });
                 });
                 
             }
-            if(userID.signature != null){
+            if(userID.signature != null && req.files.signature){
                 fs.unlink('./' + userID.signature, function (err) {
                     if (err) throw err;
+                    // if no error, file has been deleted successfully
                     console.log('File deleted!');
                 });
             }
             const body = req.body;
-            const profile= req.files.profileImage[0].path;
-            //const certificates =  req.files.certification[0].path;
-            const certificates =  certificationArray;
-            const sign = req.files.signature[0].path;
-
+            const profile = req.files.profileImage ? req.files.profileImage[0].path : userID.profile;
+            const certificates =  req.files.certification ? certificationArray : userID.certification;
+            const sign = req.files.signature ? req.files.signature[0].path : userID.signature ;
+            
             const updatedUser = await userModel.findByIdAndUpdate(
                 { _id: req.auth.id, },
                 { $set: { firstName: body.firstName, lastName: body.lastName, phone: body.phone, specialization: body.specialization, experience: body.experience, dob: body.dob, city: body.city, zipCode: body.zipCode, country: body.country, profileImage: profile, certification : certificates, signature: sign } },
@@ -319,6 +338,24 @@ module.exports = {
             return res.status(200).send({message: "Search Data Got Successfully!", data: queryData})
         } catch (error) {
            res.status(500).send(error.message);
+        }
+    },
+    // Update User Status
+    async updateStatus(req, res){
+        try {
+            const userID = await userModel.findById({_id : req.params.id})
+            if(!userID) {
+                res.status(404).json({message : "User ID is not valid!"})
+            }
+            const userStatus = await userModel.findByIdAndUpdate(
+                {_id : req.params.id},
+                {$set: {status : req.body.status}},
+                {new : true}
+            );
+            res.send({message:"User Status Updated Successfully!", data:userStatus})
+
+        } catch (error) {
+            res.status(500).send(error.message);
         }
     },
 }

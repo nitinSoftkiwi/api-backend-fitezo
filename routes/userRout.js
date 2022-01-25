@@ -30,5 +30,8 @@ router.put('/updateById/:id', fileUpload, userController.updateUserById); //Upda
 router.put('/updateUser', fileUpload, userController.updateUser); //Update User
 router.get('/getCountByType', userController.getCountByType); //Get User Count
 router.get('/search/:id', userController.userSearch); //Get User Count
+router.put('/status/:id', userController.updateStatus); // Status Update
+
+
 
 module.exports = router;
