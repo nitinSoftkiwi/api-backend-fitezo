@@ -219,22 +219,7 @@ module.exports = {
             const profile = req.files.profileImage ? req.files.profileImage[0].path : userID.profile;
             const certificates =  req.files.certification ? certificationArray : userID.certification;
             const sign = req.files.signature ? req.files.signature[0].path : userID.signature ;
-            // console.log("dsfasdfsadf:::::", profile, sign)
-            // const bodyData = {
-            //     firstName : body.firstName ? body.firstName : userModel.firstName,
-            //     lastName: body.lastName ? body.lastName : userModel.lastName,
-            //     phone: body.phone ? body.phone : userModel.phone, 
-            //     specialization: body.specialization ? body.specialization : userModel.specialization, 
-            //     experience: body.experience ? body.experience : userModel.experience,
-            //     dob: body.dob ? body.dob : userModel.dob,
-            //     city: body.city ? body.city : userModel.city,
-            //     zipCode: body.zipCode ? body.zipCode : userModel.zipCode, 
-            //     country: body.country ? body.country : userModel.country,
-            //     profileImage: body.profile ? body.profile : userModel.profileImage,
-            //     certification: body.certificates ? body.certificates : userModel.certification, 
-            //     signature: body.sign ? body.sign : userModel.signature
-                
-            // }
+      
             const updatedUser = await userModel.findByIdAndUpdate(
                 { _id: req.params.id, },
                // { $set: bodyData},
@@ -358,6 +343,33 @@ module.exports = {
             res.status(500).send(error.message);
         }
     },
+    // Add Category 
+    async creatCategory(req, res){
+        try {
+            const userID = await userModel.findById({_id : req.params.id} );
+            //console.log('User ID::::::::::', userID);
+            const categoryData = userID.category;
+            if(!userID){
+                res.status(404).send('Id is not valid!')
+            }
+            categoryData.push({
+                _id: ObjectId(),
+                title :  req.body.title,
+                description : req.body.description,
+                createdDate : req.body.createdDate
+            });
+             //console.log('Category::::::::::::::', categoryData);
+            const createCategory = await userModel.findOneAndUpdate(
+                { _id: req.params.id },
+                { $set: { category: categoryData } },
+                {new: true}
+            );
+            res.status(200).send({message: "User Mood Created Successfully", data: createCategory })
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    }
+
 }
 
 //userModel.findOne({}).then(user => console.log('User', user));
