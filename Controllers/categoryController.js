@@ -24,14 +24,39 @@ module.exports = {
         }  
     },
     //Get All Category
-    async getAllCategory(req, res){
-
+    async getAllCategory(req, res, next){
+        try{
+            const page = parseInt(req.query.page);
+            const limit = parseInt(req.query.limit);
+            const skipIndex = (page - 1) * limit;
+            const data = {};
+      
+            data.data = await categoryModel.find().sort({_id: 1})
+            .limit(limit)
+            .skip(skipIndex)
+            .exec();
+            res.paginateddata = data;
+            const total = await categoryModel.count();
+            res.status(200).send({message: "Category data got successfully!", data: data, total})
+            next();
+        }catch(err){
+            console.log("error ::: ", err);
+            return res.status(500).send(err.message);
+        }
     },
     //Get Category By ID
-    async getById(req, res){
-
+    async getCategoryById(req, res){
+        try{
+            const catID = await categoryModel.findById(req.params.id)
+            res.status(200).json({
+                message : "Category Record!",
+                data: catID
+            });
+        } catch (error) {
+            res.status(404).json({message: error.message});
+        }
     },
-    async updateById(req, res){
+    async updateCategoryById(req, res){
         const catID =  await categoryModel.findById({_id: req.params.id})
         if(!catID){
             res.status(404).json({message : "Category is not valid!"})
