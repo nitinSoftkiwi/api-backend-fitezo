@@ -343,33 +343,7 @@ module.exports = {
             res.status(500).send(error.message);
         }
     },
-    // Add Category 
-    async creatCategory(req, res){
-        try {
-            const userID = await userModel.findById({_id : req.params.id} );
-            //console.log('User ID::::::::::', userID);
-            const categoryData = userID.category;
-            if(!userID){
-                res.status(404).send('Id is not valid!')
-            }
-            categoryData.push({
-                _id: ObjectId(),
-                title :  req.body.title,
-                description : req.body.description,
-                createdDate : req.body.createdDate
-            });
-             //console.log('Category::::::::::::::', categoryData);
-            const createCategory = await userModel.findOneAndUpdate(
-                { _id: req.params.id },
-                { $set: { category: categoryData } },
-                {new: true}
-            );
-            res.status(200).send({message: "User Mood Created Successfully", data: createCategory })
-        } catch (error) {
-            res.status(500).send(error.message);
-        }
-    }
-
+   
 }
 
 //userModel.findOne({}).then(user => console.log('User', user));

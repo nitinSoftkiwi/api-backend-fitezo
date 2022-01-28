@@ -31,7 +31,6 @@ router.put('/updateUser', fileUpload, userController.updateUser); //Update User
 router.get('/getCountByType', userController.getCountByType); //Get User Count
 router.get('/search/:id', userController.userSearch); //Get User Count
 router.put('/status/:id', userController.updateStatus); // Status Update
-router.post('/createCategory/:id', userController.creatCategory); // Status Update
 
 
 

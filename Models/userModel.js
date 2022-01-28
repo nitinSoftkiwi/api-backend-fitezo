@@ -60,28 +60,7 @@ var schema = new mongoose.Schema({
         type: String,  //single upload
         default: null
     },
-    category : {
-        type : [ {
-            title : {
-                type : String,
-                default  : null
-            },
-            description : {
-                type : String,
-                default  : null
-            },
-            status : {
-                type: Number,
-                default : 1      // 0-Active, 1-Inactive
-            },
-            createdDate: {
-                type: String,
-                default : null
-            }
-        }],
-        default : []
-    },
-
+    
     trainer: [{
 
         specialization: {
