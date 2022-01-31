@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { required } = require("nodemon/lib/config");
+const { require } = require("nodemon/lib/config");
 const userController = require("../Controllers/userController");
 const multer = require('multer');
 
@@ -31,7 +31,6 @@ router.put('/updateUser', fileUpload, userController.updateUser); //Update User
 router.get('/getCountByType', userController.getCountByType); //Get User Count
 router.get('/search/:id', userController.userSearch); //Get User Count
 router.put('/status/:id', userController.updateStatus); // Status Update
-
 
 
 module.exports = router;

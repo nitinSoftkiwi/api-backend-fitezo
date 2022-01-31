@@ -28,6 +28,14 @@ var schema = new mongoose.Schema({
         type: String,
         default: null
     },
+    height: {
+        type: String,
+        default: null
+    },
+    weight: {
+        type: String,
+        default: null
+    },
     city:{
         type: String,
         default: null

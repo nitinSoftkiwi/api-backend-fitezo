@@ -223,7 +223,7 @@ module.exports = {
             const updatedUser = await userModel.findByIdAndUpdate(
                 { _id: req.params.id, },
                // { $set: bodyData},
-                { $set: { firstName: body.firstName, lastName: body.lastName, phone: body.phone, specialization: body.specialization, experience: body.experience, dob: body.dob, city: body.city, zipCode: body.zipCode, country: body.country, profileImage: profile, certification : certificates, signature: sign } },
+                { $set: { firstName: body.firstName, lastName: body.lastName, phone: body.phone, specialization: body.specialization, experience: body.experience, dob: body.dob, height: body.height, weight: body.weight, city: body.city, zipCode: body.zipCode, country: body.country, profileImage: profile, certification : certificates, signature: sign } },
                 { new: true }
             );
             res.status(200).json({
@@ -281,7 +281,7 @@ module.exports = {
             
             const updatedUser = await userModel.findByIdAndUpdate(
                 { _id: req.auth.id, },
-                { $set: { firstName: body.firstName, lastName: body.lastName, phone: body.phone, specialization: body.specialization, experience: body.experience, dob: body.dob, city: body.city, zipCode: body.zipCode, country: body.country, profileImage: profile, certification : certificates, signature: sign } },
+                { $set: { firstName: body.firstName, lastName: body.lastName, phone: body.phone, specialization: body.specialization, experience: body.experience, dob: body.dob, height: body.height, weight: body.weight, city: body.city, zipCode: body.zipCode, country: body.country, profileImage: profile, certification : certificates, signature: sign } },
                 { new: true }
             );
             res.status(200).json({
