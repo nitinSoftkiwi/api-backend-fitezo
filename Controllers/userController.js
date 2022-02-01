@@ -387,6 +387,49 @@ module.exports = {
         res.status(500).send(error.message);
     }
    },
+   async updateCalculator (req, res) {
+    try {
+        let caloriesArray= []; 
+        if(req.body.calorieNeeds){
+            req.body.calorieNeeds.forEach(calory => {
+                caloriesArray.push(calory)
+            });
+        }
+        // console.log("dddddd::", caloriesArray)
+        const userID = await userModel.findById(req.auth.id);
+        indexId = req.body;
+        const userCal = userID.fitnessCalcultor;
+        const checkIdx = userCal.findIndex((fitnesId) => fitnesId._id == indexId.fitnesId);
+        // console.log("IDDDD::::::", checkIdx)
+        if (checkIdx != -1) {
+            userCal[checkIdx].gender = indexId.gender;
+            userCal[checkIdx].age = indexId.age;
+            userCal[checkIdx].height = indexId.height;
+            userCal[checkIdx].weight = indexId.weight;
+            userCal[checkIdx].activity = indexId.activity;
+            userCal[checkIdx].neck = indexId.neck;
+            userCal[checkIdx].waist = indexId.waist;
+            userCal[checkIdx].hip = indexId.hip;
+            userCal[checkIdx].goal = indexId.goal;
+            userCal[checkIdx].bmi = indexId.bmi;
+            userCal[checkIdx].bmr = indexId.bmr;
+            userCal[checkIdx].idealBodyWeight = indexId.idealBodyWeight;
+            userCal[checkIdx].tdee = indexId.tdee;
+            userCal[checkIdx].calorieNeeds = caloriesArray;
+            userCal[checkIdx].updatedDate = indexId.updatedDate;
+        }
+        // console.log("ddddddaaaaaaaaaaaatttttt::",userCal )
+        const updatedCal = await userModel.findOneAndUpdate(
+            { _id: req.auth.id },
+            { $set: { fitnessCalcultor: userCal } },
+            {new: true}
+        );
+    
+        res.send({ message: "Fitness Details Updated successfully", data: updatedCal })
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+   },
 
 }
 

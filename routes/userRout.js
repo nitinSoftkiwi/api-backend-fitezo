@@ -32,5 +32,6 @@ router.get('/getCountByType', userController.getCountByType); //Get User Count
 router.get('/search/:id', userController.userSearch); //Get User Count
 router.put('/status/:id', userController.updateStatus); // Status Update
 router.post('/createFitness', userController.createCalculator); //Create Users
+router.put('/updateFitness', userController.updateCalculator); //Create Users
 
 module.exports = router;
