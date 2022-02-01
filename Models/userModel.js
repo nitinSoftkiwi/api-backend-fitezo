@@ -68,7 +68,75 @@ var schema = new mongoose.Schema({
         type: String,  //single upload
         default: null
     },
-    
+    fitnessCalcultor :{
+        type:  [{
+            gender:{
+                type : String,
+                default : null
+            },
+            age:{
+                type : Number,
+                default : null
+            },
+            height:{
+                type : Number,
+                default : null
+            },
+            weight:{
+                type : Number,
+                default : null
+            },
+            activity:{
+                type : String,
+                default : null
+            },
+            neck:{
+                type : Number,
+                default : null
+            },
+            waist:{
+                type : Number,
+                default : null
+            },
+            hip:{
+                type : Number,
+                default : null
+            },
+            goal:{
+                type : String,
+                default : null
+            },
+            bmi:{
+                type : Number,
+                default : null
+            },
+            bmr:{
+                type : Number,
+                default : null
+            },
+            idealBodyWeight:{
+                type : Number,
+                default : null
+            },
+            tdee:{
+                type : String,
+                default : null
+            },
+            calorieNeeds:{
+                type : [ ],
+                default : null
+            },
+            createdDate : {
+                type : Date,
+                default : Date.now()
+            },
+            updatedDate : {
+                type : Date
+               
+            }
+        }],
+        default: []
+    }, 
     trainer: [{
 
         specialization: {

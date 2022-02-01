@@ -343,7 +343,51 @@ module.exports = {
             res.status(500).send(error.message);
         }
     },
-   
+   // Create Fitness Calculator 
+   async createCalculator (req, res) {
+    try {
+        let caloriesArray= []; 
+        if(req.body.calorieNeeds){
+            req.body.calorieNeeds.forEach(calory => {
+                caloriesArray.push(calory)
+            });
+        }
+        const userID = await userModel.findById(req.auth.id);
+        const userCal = userID.fitnessCalcultor;
+    
+        if (!userID) {
+            return res.status(500).send('Id is not valid')
+        }
+        userCal.push({
+            _id: ObjectId(),
+            gender :  req.body.gender,
+            age : req.body.age,
+            height : req.body.height,
+            weight : req.body.weight,
+            activity :  req.body.activity,
+            neck : req.body.neck,
+            waist : req.body.waist,
+            hip : req.body.hip,
+            goal : req.body.goal,
+            bmi :  req.body.bmi,
+            bmr : req.body.bmr,
+            idealBodyWeight : req.body.idealBodyWeight,
+            tdee : req.body.tdee,
+            calorieNeeds : caloriesArray,
+        });
+    
+        const createdCal = await userModel.findOneAndUpdate(
+            { _id: req.auth.id },
+            { $set: { fitnessCalcultor: userCal } },
+            {new: true}
+        );
+    
+        res.send({ message: "Fitness Details Added successfully", data: createdCal })
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
+   },
+
 }
 
 //userModel.findOne({}).then(user => console.log('User', user));
