@@ -1,4 +1,6 @@
 const express = require('express');
+var bodyParser = require('body-parser')
+
 const http = require('http');
 const dotenv = require('dotenv');
 const cors = require('cors');
@@ -29,6 +31,12 @@ app.use(express.json()); //for body parser
 
 //cors 
 app.use(cors());
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// parse application/json
+app.use(bodyParser.json())
 
 // Files upload folder
 const path = require('path')
