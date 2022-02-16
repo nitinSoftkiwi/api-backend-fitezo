@@ -19,6 +19,7 @@ const mediaFilter = (req, file, cb) => {
 }
 
 const fileUpload = multer({ storage: storage }).fields([{name: "profileImage", maxCount: 1}, {name: "certification", maxCount: 5}, {name: "signature", maxCount: 1}]);
+const categoryCoachImg = multer({ storage: storage }).fields([{name: "imageTypeTrainer", maxCount: 1}]);
 
 
 router.post('/create', userController.create); //Create Users
@@ -31,7 +32,10 @@ router.put('/updateUser', fileUpload, userController.updateUser); //Update User
 router.get('/getCountByType', userController.getCountByType); //Get User Count
 router.get('/search/:id', userController.userSearch); //Get User Count
 router.put('/status/:id', userController.updateStatus); // Status Update
+router.put('/categoryTrainer/:id', userController.updateCategoryTrainer); // Status Update
 router.post('/createFitness', userController.createCalculator); //Create Users
-router.put('/updateFitness', userController.updateCalculator); //Create Users
+router.post('/createCategoryTrainer', categoryCoachImg, userController.createHeaderGetACoachAdmin); // create category get a coach header chnge category waise  
+router.get('/getCategoryTrainer',  userController.getHeaderGetACoachAdmin); //Get All CategoryTrainer header change in get a coach api  with pagination
+
 
 module.exports = router;

@@ -180,6 +180,14 @@ var schema = new mongoose.Schema({
             default: 0 // status 0 is Active and 1 is Delete 2 is Deactive
         },  
     }],
+    categoryTrainer: {
+        type: Number,
+        default: 0  // categoryTrainer 0 is Basic and 1 is stander 2 is premium
+    },
+    categoryTypeTrainer: {
+        type: String,
+        require: true
+    },
     userType: {
         type: String,
         default: 'user'

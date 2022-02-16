@@ -1,4 +1,5 @@
 const userModel = require('../Models/userModel');
+const coachCategoryHeaderpageModel = require('../Models/coachCategoryHeaderModel');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
@@ -71,6 +72,7 @@ module.exports = {
                         message:"User created successfully!!",
                         user:updatedUser
                     });
+                    console.log(user,'heloooooooooo')
                 }
             } else if (req.body.userType === "user") {
                 // check if user already exist
@@ -105,6 +107,54 @@ module.exports = {
                 message: error.message || "Some error occurred while creating user"
             });
         }  
+    },
+
+    //admin create a category using get a coach page change( header heading img and paragrph) 
+    async createHeaderGetACoachAdmin (req, res){
+        try {
+             const typeimg =req.files.imageTypeTrainer[0].path;
+            if(!req.body.headingTrainer && !req.body.paragraphTypeTrainer && !typeimg && !req.body.getCoachHeaderCategory){
+                return res.status(400).send({ message: "Content can not be empty!" });
+            }else {
+                const createGetACoachHeaderTariner = await coachCategoryHeaderpageModel.create({
+                    headingTrainer: req.body.headingTrainer, 
+                    paragraphTypeTrainer: req.body.paragraphTypeTrainer, 
+                    imageTypeTrainer: req.files.imageTypeTrainer[0].path, 
+                    getCoachHeaderCategory: req.body.getCoachHeaderCategory,
+                }  
+            )
+                res.send({
+                    message:"Get a Coach category header created successfully!!",
+                    data:createGetACoachHeaderTariner
+                });
+             }
+        } catch (error) {
+            console.log("error ::: ", error);
+            res.status(500).json({
+                message: error.message || "Some error occurred while creating Coach"
+            });
+        }
+    },
+    // admin get a category All using a get a coach field ( header heading img and paragrph)
+    async getHeaderGetACoachAdmin (req, res, next){
+        try{
+            const page = parseInt(req.query.page);
+            const limit = parseInt(req.query.limit);
+            const skipIndex = (page - 1) * limit;
+            const data = {};
+      
+            data.data = await coachCategoryHeaderpageModel.find().sort({_id: 1})
+            .limit(limit)
+            .skip(skipIndex)
+            .exec();
+            res.paginateddata = data;
+            const total = await coachCategoryHeaderpageModel.count();
+            res.status(200).send({message: "Category data got successfully!", data: data, total})
+            next();
+        }catch(err){
+            console.log("error ::: ", err);
+            return res.status(500).send(err.message);
+        }
     },
     //User Login
     async login(req, res) {
@@ -178,6 +228,7 @@ module.exports = {
     },
     //update Users by ID
     async updateUserById(req, res) {
+        console.log('nitin kumar',req)
         try {
             
             let certificationArray= []; 
@@ -223,7 +274,7 @@ module.exports = {
             const updatedUser = await userModel.findByIdAndUpdate(
                 { _id: req.params.id, },
                // { $set: bodyData},
-                { $set: { firstName: body.firstName, lastName: body.lastName, phone: body.phone, specialization: body.specialization, experience: body.experience, dob: body.dob, height: body.height, weight: body.weight, city: body.city, zipCode: body.zipCode, country: body.country, profileImage: profile, certification : certificates, signature: sign } },
+                { $set: { firstName: body.firstName, lastName: body.lastName, phone: body.phone, specialization: body.specialization, experience: body.experience, dob: body.dob, height: body.height, weight: body.weight, city: body.city, zipCode: body.zipCode, country: body.country, categoryTypeTrainer: body.categoryTypeTrainer, profileImage: profile, certification : certificates, signature: sign, } },
                 { new: true }
             );
             res.status(200).json({
@@ -314,7 +365,8 @@ module.exports = {
                 {phone : {$regex: regex}},
                 {email : {$regex: regex}},
                 {experience : {$regex: regex}},
-                {specialization : {$regex: regex}}
+                {specialization : {$regex: regex}},
+                {categoryTypeTrainer : {$regex: regex}}
             ]}
             const queryData = await userModel.find(condition);
             if(!queryData) {
@@ -343,6 +395,24 @@ module.exports = {
             res.status(500).send(error.message);
         }
     },
+    //update categoryTrainer like basic and stander
+    async updateCategoryTrainer(req, res){
+        try {
+            const userId = await userModel.findById({_id : req.params.id})
+            if(!userId){
+                res.status(404).json({message: "user Id is not valid"})
+            }
+            const userCategoryTrainer = await userModel.findByIdAndUpdate(
+                {_id : req.params.id},
+                {$set: {categoryTrainer : req.body.categoryTrainer}}, // basic and stander and premum
+                {new : true}
+            );
+            res.send({message: "user Category Trainer update Successfully!", data:userCategoryTrainer})
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    },
+
    // Create Fitness Calculator 
    async createCalculator (req, res) {
     try {
