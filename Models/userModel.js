@@ -68,6 +68,14 @@ var schema = new mongoose.Schema({
         type: String,  //single upload
         default: null
     },
+    rating: {
+        type: Number, 
+        default: null
+    },
+    about: {
+        type: String, 
+        default: null
+    },
     fitnessCalcultor :{
         type:  [{
             gender:{
@@ -137,6 +145,23 @@ var schema = new mongoose.Schema({
         }],
         default: []
     }, 
+    trainerVideo: {
+        type: [{
+            vidTitle : {
+                type : String,
+                default: null
+            },
+            vidDescription: {
+                type : String,
+                default : null
+           },
+           vidPath: {
+               type: String,
+               default : null
+           }
+        }],
+        default:[]
+    },
     trainer: [{
 
         specialization: {

@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const firebase = require('firebase/auth');
+const { send } = require('process');
 const { ObjectId } = require('mongoose').Types;
 
 module.exports = {
@@ -108,7 +109,6 @@ module.exports = {
             });
         }  
     },
-
     //User Login
     async login(req, res) {
        
@@ -181,7 +181,7 @@ module.exports = {
     },
     //update Users by ID
     async updateUserById(req, res) {
-        console.log('nitin kumar',req)
+
         try {
             
             let certificationArray= []; 
@@ -227,7 +227,7 @@ module.exports = {
             const updatedUser = await userModel.findByIdAndUpdate(
                 { _id: req.params.id, },
                // { $set: bodyData},
-                { $set: { firstName: body.firstName, lastName: body.lastName, phone: body.phone, specialization: body.specialization, experience: body.experience, dob: body.dob, height: body.height, weight: body.weight, city: body.city, zipCode: body.zipCode, country: body.country, categoryTypeTrainer: body.categoryTypeTrainer, profileImage: profile, certification : certificates, signature: sign, } },
+                { $set: { firstName: body.firstName, lastName: body.lastName, phone: body.phone, specialization: body.specialization, experience: body.experience, dob: body.dob, height: body.height, weight: body.weight,  about: body.about, city: body.city, zipCode: body.zipCode, country: body.country, categoryTypeTrainer: body.categoryTypeTrainer, profileImage: profile, certification : certificates, signature: sign, } },
                 { new: true }
             );
             res.status(200).json({
@@ -285,7 +285,7 @@ module.exports = {
             
             const updatedUser = await userModel.findByIdAndUpdate(
                 { _id: req.auth.id, },
-                { $set: { firstName: body.firstName, lastName: body.lastName, phone: body.phone, specialization: body.specialization, experience: body.experience, dob: body.dob, height: body.height, weight: body.weight, city: body.city, zipCode: body.zipCode, country: body.country, profileImage: profile, certification : certificates, signature: sign } },
+                { $set: { firstName: body.firstName, lastName: body.lastName, phone: body.phone, specialization: body.specialization, experience: body.experience, dob: body.dob, height: body.height, weight: body.weight, about: body.about, city: body.city, zipCode: body.zipCode, country: body.country, profileImage: profile, certification : certificates, signature: sign } },
                 { new: true }
             );
             res.status(200).json({
@@ -519,7 +519,52 @@ module.exports = {
         } catch (error) {
            res.status(500).send(error.message);
         }
-    }
+    },
+    // Create Rating
+    async insertRating (req, res){
+        try {
+            console.log("dddddddddd::::", req.body , req.params.id);
+            const trainerID = await userModel.findById({_id : req.params.id});
+            if(!trainerID) {
+                res.status(404).json({message : "Trainer Id is not valid!"});
+            }
+            const rating = await userModel.findByIdAndUpdate(
+                {_id: req.params.id},
+                {$set : {rating : req.body.rating}},
+                {new : true}
+            );     
+            res.send({message : "Rating Submitted Successfully!", data: rating });
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    },
+    //
+    async insertTrainerVideoGallary(req, res){
+        try {
+            const videoPtah = req.file.path;
+            // console.log("Pathhhhh::::", videoPtah)
+            const trainerID = await userModel.findById(req.auth.id);
+            const trainerVidID = trainerID.trainerVideo;
+            if (!trainerID) {
+                return res.status(500).send('Id is not valid');
+            }
+            trainerVidID.push({
+                _id: ObjectId(),
+                vidTitle: req.body.vidTitle,
+                vidDescription: req.body.vidDescription,
+                vidPath: videoPtah
+            });
+
+            const insertVideo = await userModel.findByIdAndUpdate(
+                { _id: req.auth.id },
+                { $set: { trainerVideo: trainerVidID } },
+                {new: true}
+            )
+            res.send({message: "Video Uploaded Successfully!", data:insertVideo })
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    },
 }
 
 //userModel.findOne({}).then(user => console.log('User', user));
