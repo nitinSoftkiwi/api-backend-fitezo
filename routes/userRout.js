@@ -36,6 +36,6 @@ router.put('/categoryTrainer/:id', userController.updateCategoryTrainer); // Sta
 router.post('/createFitness', userController.createCalculator); //Create Users
 router.post('/createCategoryTrainer', categoryCoachImg, userController.createHeaderGetACoachAdmin); // create category get a coach header chnge category waise  
 router.get('/getCategoryTrainer',  userController.getHeaderGetACoachAdmin); //Get All CategoryTrainer header change in get a coach api  with pagination
-
+router.get('/coachSearch/:id', userController.getHeaderCoachSearch); // Search Coach
 
 module.exports = router;

@@ -109,53 +109,6 @@ module.exports = {
         }  
     },
 
-    //admin create a category using get a coach page change( header heading img and paragrph) 
-    async createHeaderGetACoachAdmin (req, res){
-        try {
-             const typeimg =req.files.imageTypeTrainer[0].path;
-            if(!req.body.headingTrainer && !req.body.paragraphTypeTrainer && !typeimg && !req.body.getCoachHeaderCategory){
-                return res.status(400).send({ message: "Content can not be empty!" });
-            }else {
-                const createGetACoachHeaderTariner = await coachCategoryHeaderpageModel.create({
-                    headingTrainer: req.body.headingTrainer, 
-                    paragraphTypeTrainer: req.body.paragraphTypeTrainer, 
-                    imageTypeTrainer: req.files.imageTypeTrainer[0].path, 
-                    getCoachHeaderCategory: req.body.getCoachHeaderCategory,
-                }  
-            )
-                res.send({
-                    message:"Get a Coach category header created successfully!!",
-                    data:createGetACoachHeaderTariner
-                });
-             }
-        } catch (error) {
-            console.log("error ::: ", error);
-            res.status(500).json({
-                message: error.message || "Some error occurred while creating Coach"
-            });
-        }
-    },
-    // admin get a category All using a get a coach field ( header heading img and paragrph)
-    async getHeaderGetACoachAdmin (req, res, next){
-        try{
-            const page = parseInt(req.query.page);
-            const limit = parseInt(req.query.limit);
-            const skipIndex = (page - 1) * limit;
-            const data = {};
-      
-            data.data = await coachCategoryHeaderpageModel.find().sort({_id: 1})
-            .limit(limit)
-            .skip(skipIndex)
-            .exec();
-            res.paginateddata = data;
-            const total = await coachCategoryHeaderpageModel.count();
-            res.status(200).send({message: "Category data got successfully!", data: data, total})
-            next();
-        }catch(err){
-            console.log("error ::: ", err);
-            return res.status(500).send(err.message);
-        }
-    },
     //User Login
     async login(req, res) {
        
@@ -404,7 +357,7 @@ module.exports = {
             }
             const userCategoryTrainer = await userModel.findByIdAndUpdate(
                 {_id : req.params.id},
-                {$set: {categoryTrainer : req.body.categoryTrainer}}, // basic and stander and premum
+                {$set: {categoryTrainer : req.body.categoryTrainer}}, // basic and stander and premium
                 {new : true}
             );
             res.send({message: "user Category Trainer update Successfully!", data:userCategoryTrainer})
@@ -412,7 +365,6 @@ module.exports = {
             res.status(500).send(error.message);
         }
     },
-
    // Create Fitness Calculator 
    async createCalculator (req, res) {
     try {
@@ -457,6 +409,7 @@ module.exports = {
         res.status(500).send(error.message);
     }
    },
+   // Update Fitness Calculator
    async updateCalculator (req, res) {
     try {
         let caloriesArray= []; 
@@ -500,7 +453,73 @@ module.exports = {
         res.status(500).send(error.message);
     }
    },
-
+    //admin create a category using get a coach page change( header heading img and paragrph) 
+       async createHeaderGetACoachAdmin (req, res){
+        try {
+             const typeimg =req.files.imageTypeTrainer[0].path;
+            if(!req.body.headingTrainer && !req.body.paragraphTypeTrainer && !typeimg && !req.body.getCoachHeaderCategory){
+                return res.status(400).send({ message: "Content can not be empty!" });
+            }else {
+                const createGetACoachHeaderTariner = await coachCategoryHeaderpageModel.create({
+                    headingTrainer: req.body.headingTrainer, 
+                    paragraphTypeTrainer: req.body.paragraphTypeTrainer, 
+                    imageTypeTrainer: req.files.imageTypeTrainer[0].path, 
+                    getCoachHeaderCategory: req.body.getCoachHeaderCategory,
+                }  
+            )
+                res.send({
+                    message:"Get a Coach category header created successfully!!",
+                    data:createGetACoachHeaderTariner
+                });
+             }
+        } catch (error) {
+            console.log("error ::: ", error);
+            res.status(500).json({
+                message: error.message || "Some error occurred while creating Coach"
+            });
+        }
+    },
+    // admin get a category All using a get a coach field ( header heading img and paragrph)
+    async getHeaderGetACoachAdmin (req, res, next){
+        try{
+            const page = parseInt(req.query.page);
+            const limit = parseInt(req.query.limit);
+            const skipIndex = (page - 1) * limit;
+            const data = {};
+      
+            data.data = await coachCategoryHeaderpageModel.find().sort({_id: 1})
+            .limit(limit)
+            .skip(skipIndex)
+            .exec();
+            res.paginateddata = data;
+            const total = await coachCategoryHeaderpageModel.count();
+            res.status(200).send({message: "Category data got successfully!", data: data, total})
+            next();
+        }catch(err){
+            console.log("error ::: ", err);
+            return res.status(500).send(err.message);
+        }
+    },
+    // search Category Coach
+    async getHeaderCoachSearch (req, res){
+        try {
+            const data = req.params.id;
+            const regex = new RegExp(data, 'i')
+            const condition = {$or : [
+                {getCoachHeaderCategory : {$regex: regex}},
+                {headingTrainer : {$regex: regex}},
+                {paragraphTypeTrainer : {$regex: regex}},
+                {imageTypeTrainer : {$regex: regex}}
+            ]}
+            const queryData = await coachCategoryHeaderpageModel.find(condition);
+            if(!queryData) {
+                return res.status(400).send('Error, No Data Found...!')
+            }
+            return res.status(200).send({message: "Search Data Got Successfully!", data: queryData})
+        } catch (error) {
+           res.status(500).send(error.message);
+        }
+    }
 }
 
 //userModel.findOne({}).then(user => console.log('User', user));
