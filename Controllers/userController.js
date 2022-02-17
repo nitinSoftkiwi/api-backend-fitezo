@@ -130,7 +130,7 @@ module.exports = {
             res.status(200).send({message: "user login successfully", user: user, token});
         } catch (error) {
             console.log("error ::: ", error);
-            return res.status(500).send({error : error.messsage , message : "something went wrong!"})
+            return res.status(500).send({error : error.message , message : "something went wrong!"})
         }
     },
     // Get All User
@@ -538,7 +538,7 @@ module.exports = {
             res.status(500).send(error.message);
         }
     },
-    //
+    // Upload Trainer Video
     async insertTrainerVideoGallary(req, res){
         try {
             const videoPtah = req.file.path;
@@ -565,6 +565,38 @@ module.exports = {
             res.status(500).send(error.message);
         }
     },
+    // update trainer uploaded videos
+    async updateTrainerVideoGallery(req, res){
+        try {
+            const trainerID = await userModel.findById(req.auth.id);
+            indexId = req.body;
+            const trainerVideoID = trainerID.trainerVideo;
+            const checkIdx = trainerVideoID.findIndex((videoID) => videoID._id == indexId.videoID);
+        
+        if (checkIdx != -1) {
+            trainerVideoID[checkIdx].vidTitle = indexId.vidTitle;
+            trainerVideoID[checkIdx].vidDescription = indexId.vidDescription;
+            if( trainerVideoID[checkIdx].vidPath != null){
+                fs.unlink('./' + trainerVideoID[checkIdx].vidPath, function (err) {
+                        if (err) throw err;
+                        // if no error, file has been deleted successfully
+                        console.log('File deleted!');
+                    });
+            }
+            trainerVideoID[checkIdx].vidPath = req.file.path;
+        }
+        const updateTrainerVideo = await userModel.findOneAndUpdate(
+            { _id: req.auth.id },
+            { $set: { trainerVideo: trainerVideoID } },
+            {new: true}
+        );
+    
+        res.send({ message: "Video Details Updated successfully", data: updateTrainerVideo })
+        } catch (error) {
+            res.status(500).send(error,message)
+        }
+    }
+
 }
 
 //userModel.findOne({}).then(user => console.log('User', user));

@@ -39,5 +39,6 @@ router.get('/getCategoryTrainer',  userController.getHeaderGetACoachAdmin); //Ge
 router.get('/coachSearch/:id', userController.getHeaderCoachSearch); // Search Coach
 router.post('/rating/:id', userController.insertRating); //Rating
 router.post('/videoGallary', videoUpload, userController.insertTrainerVideoGallary); // Video upload for Trainer
+router.put('/updateVideoGallary', videoUpload, userController.updateTrainerVideoGallery); // Video upload for Trainer
 
 module.exports = router;

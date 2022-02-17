@@ -162,49 +162,6 @@ var schema = new mongoose.Schema({
         }],
         default:[]
     },
-    trainer: [{
-
-        specialization: {
-            type: String,
-            require: true
-        },
-        certification: {
-            type: String,
-            require: true
-        },
-        photo: {
-            type:String,
-            require: true
-        },
-        signature: {
-            type: String,
-            require: true
-        },
-        uploadVideo: {
-            type: String,
-            require: true
-        },
-        uploadAudio: {
-            type: String,
-            require: true
-        },
-        classesName: {
-            type: String,
-            require: true
-        },
-        validityVideoDate: {
-            type: Date,
-            require: true
-        },
-        categoryVideoName: {
-            type: String,
-            require: true
-        },
-        status: {
-            type: Number,
-            default: 0 // status 0 is Active and 1 is Delete 2 is Deactive
-        },  
-    }],
     categoryTrainer: {
         type: Number,
         default: 0  // categoryTrainer 0 is Basic and 1 is stander 2 is premium
