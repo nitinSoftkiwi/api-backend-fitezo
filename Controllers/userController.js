@@ -365,8 +365,8 @@ module.exports = {
             res.status(500).send(error.message);
         }
     },
-   // Create Fitness Calculator 
-   async createCalculator (req, res) {
+    // Create Fitness Calculator 
+    async createCalculator (req, res) {
     try {
         let caloriesArray= []; 
         if(req.body.calorieNeeds){
@@ -408,9 +408,9 @@ module.exports = {
     } catch (error) {
         res.status(500).send(error.message);
     }
-   },
-   // Update Fitness Calculator
-   async updateCalculator (req, res) {
+    },
+    // Update Fitness Calculator
+    async updateCalculator (req, res) {
     try {
         let caloriesArray= []; 
         if(req.body.calorieNeeds){
@@ -454,7 +454,7 @@ module.exports = {
     }
    },
     //admin create a category using get a coach page change( header heading img and paragrph) 
-       async createHeaderGetACoachAdmin (req, res){
+    async createHeaderGetACoachAdmin (req, res){
         try {
              const typeimg =req.files.imageTypeTrainer[0].path;
             if(!req.body.headingTrainer && !req.body.paragraphTypeTrainer && !typeimg && !req.body.getCoachHeaderCategory){
@@ -565,7 +565,6 @@ module.exports = {
             res.status(500).send(error.message);
         }
     },
-
     // update trainer uploaded videos
     async updateTrainerVideoGallery(req, res){
         try {
@@ -597,20 +596,15 @@ module.exports = {
             res.status(500).send(error,message)
         }
     },
-
     // Delete Trainer Video 
     async deleteTrainerVideoGallery(req, res){
         try {
-           
-            const trainerID = await userModel.findById(req.auth.id);
-            const indexId = req.params;
-            const trainerVideoID = trainerID.trainerVideo;
-            const checkIdx = trainerVideoID.findByIdAndRemove((videoID) => videoID._id == indexId.videoID);
-            if (checkIdx=1) {
-                res.status(404).send({ message: "Video ID is invalid!" })
-            }
-            const deleteVideo = await userModel.findByIdAndRemove(checkIdx);
-            res.send({ message: "Video Details Deleted successfully!" })
+            const updateTrainerVideo = await userModel.updateOne(
+                { _id: req.auth.id },
+                { $pull:  { trainerVideo: { _id: req.params.id } } },
+                {new: true}
+            );
+            res.send({ message: "Video Details Deleted successfully!"})
         } catch (error) {
             res.status(500).send(error.message);
         }
