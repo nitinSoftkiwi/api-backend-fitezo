@@ -76,6 +76,27 @@ var schema = new mongoose.Schema({
         type: String, 
         default: null
     },
+    trainerAvailabilities : {
+        type: [{
+            day:{
+                type: String,
+                default : null,
+            },
+            date:{
+                type: String,
+                default : null,
+            },
+            slots:{
+                type: [],
+                default : null,
+            },
+            status:{
+                type: Number,   // 0- Active, 1- Inactive
+                default : null,
+            }
+        }],
+        default: []
+    },
     fitnessCalcultor :{
         type:  [{
             gender:{

@@ -11,6 +11,844 @@ module.exports = {
 
     //Create User
     async create(req, res) {
+
+        let trainerAvailability = [
+            {
+                day:"Monday",
+                date: "03-01-2022",
+                slots: [
+                    {
+                        "toTime": "01 AM",
+                        "fromTime": "02 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "02 AM",
+                        "fromTime": "03 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "03 AM",
+                        "fromTime": "04 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "04 AM",
+                        "fromTime": "05 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "05 AM",
+                        "fromTime": "06 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "06 AM",
+                        "fromTime": "07 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "07 AM",
+                        "fromTime": "08 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "08 AM",
+                        "fromTime": "09 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "09 AM",
+                        "fromTime": "10 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "10 AM",
+                        "fromTime": "11 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "11 AM",
+                        "fromTime": "12 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "12 PM",
+                        "fromTime": "01 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "01 PM",
+                        "fromTime": "02 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "02 PM",
+                        "fromTime": "03 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "03 PM",
+                        "fromTime": "04 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "04 PM",
+                        "fromTime": "05 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "05 PM",
+                        "fromTime": "06 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "06 PM",
+                        "fromTime": "07 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "07 PM",
+                        "fromTime": "08 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "08 PM",
+                        "fromTime": "09 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "09 PM",
+                        "fromTime": "10 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "10 PM",
+                        "fromTime": "11 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "11 PM",
+                        "fromTime": "12 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "12 AM",
+                        "fromTime": "01 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+        
+                ],
+                status: 1 // 0- Active, 1- Inactive
+            },
+            {
+                day:"Tuesday",
+                date: "04-01-2022",
+                slots: [
+                    {
+                        "toTime": "01 AM",
+                        "fromTime": "02 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "02 AM",
+                        "fromTime": "03 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "03 AM",
+                        "fromTime": "04 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "04 AM",
+                        "fromTime": "05 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "05 AM",
+                        "fromTime": "06 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "06 AM",
+                        "fromTime": "07 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "07 AM",
+                        "fromTime": "08 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "08 AM",
+                        "fromTime": "09 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "09 AM",
+                        "fromTime": "10 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "10 AM",
+                        "fromTime": "11 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "11 AM",
+                        "fromTime": "12 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "12 PM",
+                        "fromTime": "01 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "01 PM",
+                        "fromTime": "02 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "02 PM",
+                        "fromTime": "03 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "03 PM",
+                        "fromTime": "04 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "04 PM",
+                        "fromTime": "05 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "05 PM",
+                        "fromTime": "06 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "06 PM",
+                        "fromTime": "07 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "07 PM",
+                        "fromTime": "08 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "08 PM",
+                        "fromTime": "09 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "09 PM",
+                        "fromTime": "10 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "10 PM",
+                        "fromTime": "11 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "11 PM",
+                        "fromTime": "12 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "12 AM",
+                        "fromTime": "01 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+        
+                ],
+                status: 1 // 0- Active, 1- Inactive
+            },
+            {
+                day:"Wednesday",
+                date: "05-01-2022",
+                slots: [
+                    {
+                        "toTime": "01 AM",
+                        "fromTime": "02 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "02 AM",
+                        "fromTime": "03 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "03 AM",
+                        "fromTime": "04 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "04 AM",
+                        "fromTime": "05 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "05 AM",
+                        "fromTime": "06 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "06 AM",
+                        "fromTime": "07 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "07 AM",
+                        "fromTime": "08 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "08 AM",
+                        "fromTime": "09 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "09 AM",
+                        "fromTime": "10 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "10 AM",
+                        "fromTime": "11 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "11 AM",
+                        "fromTime": "12 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "12 PM",
+                        "fromTime": "01 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "01 PM",
+                        "fromTime": "02 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "02 PM",
+                        "fromTime": "03 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "03 PM",
+                        "fromTime": "04 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "04 PM",
+                        "fromTime": "05 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "05 PM",
+                        "fromTime": "06 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "06 PM",
+                        "fromTime": "07 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "07 PM",
+                        "fromTime": "08 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "08 PM",
+                        "fromTime": "09 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "09 PM",
+                        "fromTime": "10 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "10 PM",
+                        "fromTime": "11 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "11 PM",
+                        "fromTime": "12 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "12 AM",
+                        "fromTime": "01 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+        
+                ],
+                status: 1 // 0- Active, 1- Inactive
+            },
+            {
+                day:"Thursday",
+                date: "06-01-2022",
+                slots: [
+                    {
+                        "toTime": "01 AM",
+                        "fromTime": "02 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "02 AM",
+                        "fromTime": "03 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "03 AM",
+                        "fromTime": "04 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "04 AM",
+                        "fromTime": "05 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "05 AM",
+                        "fromTime": "06 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "06 AM",
+                        "fromTime": "07 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "07 AM",
+                        "fromTime": "08 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "08 AM",
+                        "fromTime": "09 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "09 AM",
+                        "fromTime": "10 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "10 AM",
+                        "fromTime": "11 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "11 AM",
+                        "fromTime": "12 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "12 PM",
+                        "fromTime": "01 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "01 PM",
+                        "fromTime": "02 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "02 PM",
+                        "fromTime": "03 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "03 PM",
+                        "fromTime": "04 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "04 PM",
+                        "fromTime": "05 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "05 PM",
+                        "fromTime": "06 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "06 PM",
+                        "fromTime": "07 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "07 PM",
+                        "fromTime": "08 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "08 PM",
+                        "fromTime": "09 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "09 PM",
+                        "fromTime": "10 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "10 PM",
+                        "fromTime": "11 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "11 PM",
+                        "fromTime": "12 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "12 AM",
+                        "fromTime": "01 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+        
+                ],
+                status: 1 // 0- Active, 1- Inactive
+            },
+            {
+                day:"Friday",
+                date: "07-01-2022",
+                slots: [
+                    {
+                        "toTime": "10 AM",
+                        "fromTime": "11 AM",
+                        "status": 1
+                    },
+                    {
+                        "toTime": "11 AM",
+                        "fromTime": "12 PM",
+                        "status": 1
+                    },
+                    {
+                        "toTime": "12 PM",
+                        "fromTime": "1 PM",
+                        "status": 1
+                    },
+                    {
+                        "toTime": "1 PM",
+                        "fromTime": "2 PM",
+                        "status": 1
+                    },
+                    {
+                        "toTime": "2 PM",
+                        "fromTime": "3 PM",
+                        "status": 1
+                    },
+                    {
+                        "toTime": "3 PM",
+                        "fromTime": "4 PM",
+                        "status": 1
+                    },
+                    {
+                        "toTime": "4 PM",
+                        "fromTime": "5 PM",
+                        "status": 1
+                    },
+                    {
+                        "toTime": "5 PM",
+                        "fromTime": "6 PM",
+                        "status": 1
+                    },
+                    {
+                        "toTime": "6 PM",
+                        "fromTime": "7 PM",
+                        "status": 1
+                    },
+                    {
+                        "toTime": "7 PM",
+                        "fromTime": "8 PM",
+                        "status": 1
+                    },
+                    {
+                        "toTime": "8 PM",
+                        "fromTime": "9 PM",
+                        "status": 1
+                    },
+                    {
+                        "toTime": "9 PM",
+                        "fromTime": "10 PM",
+                        "status": 1
+                    }
+                ],
+                status: 1 // 0- Active, 1- Inactive
+            },
+            {
+                day:"Saturday",
+                date: "08-01-2022",
+                slots: [
+                    {
+                        "toTime": "01 AM",
+                        "fromTime": "02 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "02 AM",
+                        "fromTime": "03 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "03 AM",
+                        "fromTime": "04 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "04 AM",
+                        "fromTime": "05 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "05 AM",
+                        "fromTime": "06 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "06 AM",
+                        "fromTime": "07 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "07 AM",
+                        "fromTime": "08 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "08 AM",
+                        "fromTime": "09 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "09 AM",
+                        "fromTime": "10 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "10 AM",
+                        "fromTime": "11 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "11 AM",
+                        "fromTime": "12 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "12 PM",
+                        "fromTime": "01 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "01 PM",
+                        "fromTime": "02 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "02 PM",
+                        "fromTime": "03 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "03 PM",
+                        "fromTime": "04 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "04 PM",
+                        "fromTime": "05 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "05 PM",
+                        "fromTime": "06 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "06 PM",
+                        "fromTime": "07 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "07 PM",
+                        "fromTime": "08 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "08 PM",
+                        "fromTime": "09 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "09 PM",
+                        "fromTime": "10 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "10 PM",
+                        "fromTime": "11 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "11 PM",
+                        "fromTime": "12 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "12 AM",
+                        "fromTime": "01 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+        
+                ],
+                status: 1 // 0- Active, 1- Inactive
+            },
+            {
+                day:"Sunday",
+                date: "09-01-2022",
+                slots: [
+                    {
+                        "toTime": "01 AM",
+                        "fromTime": "02 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "02 AM",
+                        "fromTime": "03 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "03 AM",
+                        "fromTime": "04 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "04 AM",
+                        "fromTime": "05 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "05 AM",
+                        "fromTime": "06 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "06 AM",
+                        "fromTime": "07 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "07 AM",
+                        "fromTime": "08 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "08 AM",
+                        "fromTime": "09 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "09 AM",
+                        "fromTime": "10 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "10 AM",
+                        "fromTime": "11 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "11 AM",
+                        "fromTime": "12 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "12 PM",
+                        "fromTime": "01 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "01 PM",
+                        "fromTime": "02 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "02 PM",
+                        "fromTime": "03 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "03 PM",
+                        "fromTime": "04 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "04 PM",
+                        "fromTime": "05 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "05 PM",
+                        "fromTime": "06 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "06 PM",
+                        "fromTime": "07 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "07 PM",
+                        "fromTime": "08 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "08 PM",
+                        "fromTime": "09 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "09 PM",
+                        "fromTime": "10 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "10 PM",
+                        "fromTime": "11 PM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "11 PM",
+                        "fromTime": "12 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+                    {
+                        "toTime": "12 AM",
+                        "fromTime": "01 AM",
+                        "status": 1 // 0-Active, 1- Inactive
+                    },
+        
+                ],
+                status: 1 // 0- Active, 1- Inactive
+            }
+           ]
         try {
             // Get user input
             const { firstName, lastName, email, password, phone, dob, experience, specialization} = req.body;
@@ -62,7 +900,8 @@ module.exports = {
                         phone,
                         dob,
                         experience, 
-                        specialization
+                        specialization,
+                        trainerAvailabilities : trainerAvailability
                     });
                     const updatedUser = await userModel.findOneAndUpdate(
                         { _id: user._id },
@@ -73,7 +912,7 @@ module.exports = {
                         message:"User created successfully!!",
                         user:updatedUser
                     });
-                    console.log(user,'heloooooooooo')
+                   // console.log(user,'heloooooooooo')
                 }
             } else if (req.body.userType === "user") {
                 // check if user already exist
@@ -620,7 +1459,16 @@ module.exports = {
         } catch (error) {
             res.status(500).send(error.message);
         }
-    }
+    },
+    // update Trainer Availability
+    // async updateTrainerAvailability (req, res){
+    //     try {
+            
+    //     } catch (error) {
+    //         res.status(500).send(error.message)
+    //     }
+    // }
+
 }
 
 //userModel.findOne({}).then(user => console.log('User', user));
