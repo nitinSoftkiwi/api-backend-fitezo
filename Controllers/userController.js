@@ -565,6 +565,7 @@ module.exports = {
             res.status(500).send(error.message);
         }
     },
+
     // update trainer uploaded videos
     async updateTrainerVideoGallery(req, res){
         try {
@@ -595,8 +596,37 @@ module.exports = {
         } catch (error) {
             res.status(500).send(error,message)
         }
-    }
+    },
 
+    // Delete Trainer Video 
+    async deleteTrainerVideoGallery(req, res){
+        try {
+           
+            const trainerID = await userModel.findById(req.auth.id);
+            const indexId = req.params;
+            const trainerVideoID = trainerID.trainerVideo;
+            const checkIdx = trainerVideoID.findByIdAndRemove((videoID) => videoID._id == indexId.videoID);
+            if (checkIdx=1) {
+                res.status(404).send({ message: "Video ID is invalid!" })
+            }
+            const deleteVideo = await userModel.findByIdAndRemove(checkIdx);
+            res.send({ message: "Video Details Deleted successfully!" })
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    },
+    // Get Trainer Video
+    async getTrainerVideo(req, res){
+        try {
+            const trainerID = await userModel.findById(req.auth.id);
+            ids = req.params.id;
+            const trainerVideoID = trainerID.trainerVideo;
+            const videoData = trainerVideoID.find(x => x.id === ids);
+            res.status(200).send({message: "Video Get Successfully!", data: videoData})
+        } catch (error) {
+            res.status(500).send(error.message);
+        }
+    }
 }
 
 //userModel.findOne({}).then(user => console.log('User', user));

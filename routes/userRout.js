@@ -33,12 +33,16 @@ router.get('/getCountByType', userController.getCountByType); //Get User Count
 router.get('/search/:id', userController.userSearch); //Search Data for Users
 router.put('/status/:id', userController.updateStatus); // Status Update
 router.put('/categoryTrainer/:id', userController.updateCategoryTrainer); // Status Update
-router.post('/createFitness', userController.createCalculator); //Create Users
+router.post('/createFitness', userController.createCalculator); //Create Fitness Data
+router.post('/updateFitness', userController.updateCalculator); //Create Fitness Data
 router.post('/createCategoryTrainer', categoryCoachImg, userController.createHeaderGetACoachAdmin); // create category get a coach header chnge category waise  
 router.get('/getCategoryTrainer',  userController.getHeaderGetACoachAdmin); //Get All CategoryTrainer header change in get a coach api  with pagination
 router.get('/coachSearch/:id', userController.getHeaderCoachSearch); // Search Coach
 router.post('/rating/:id', userController.insertRating); //Rating
 router.post('/videoGallary', videoUpload, userController.insertTrainerVideoGallary); // Video upload for Trainer
-router.put('/updateVideoGallary', videoUpload, userController.updateTrainerVideoGallery); // Video upload for Trainer
+router.put('/updateVideoGallary', videoUpload, userController.updateTrainerVideoGallery); // Update Video upload for Trainer
+router.get('/viewVideo/:id',  userController.getTrainerVideo); // Delete uploaded video for Trainer
+router.delete('/deleteVideoGallary/:id',  userController.deleteTrainerVideoGallery); // Delete uploaded video for Trainer
+
 
 module.exports = router;
