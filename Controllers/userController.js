@@ -1460,14 +1460,36 @@ module.exports = {
             res.status(500).send(error.message);
         }
     },
-    // update Trainer Availability
-    // async updateTrainerAvailability (req, res){
-    //     try {
-            
-    //     } catch (error) {
-    //         res.status(500).send(error.message)
-    //     }
-    // }
+    //update Trainer Availability
+    async updateTrainerAvailability (req, res){
+        try {
+            let slotArray= []; 
+            req.body.slots.forEach(slotData => {
+                slotArray.push(slotData)
+            });
+            const trainerID = await userModel.findOne({ _id: req.auth.id});
+            //console.log("IDDDDDD", trainerID)
+            const indexId = req.body;
+            const trainerAvailabilityDetails = trainerID.trainerAvailabilities;
+            const checkIdx = trainerAvailabilityDetails.findIndex((availId) => availId._id == indexId.availId);
+           
+            if(checkIdx != -1){
+                trainerAvailabilityDetails[checkIdx].date = indexId.date;
+                trainerAvailabilityDetails[checkIdx].slots = slotArray;
+                trainerAvailabilityDetails[checkIdx].status = 0;
+            }
+            const updateAvailability = await userModel.findOneAndUpdate(
+                { _id: req.auth.id},
+                {$set: {trainerAvailabilities : trainerAvailabilityDetails}},
+                {new: true}
+            );
+            console.log("uuuuuuuuuTTT", updateAvailability )
+            res.send({message: "Trainer Availability has been updated successfully!", data: updateAvailability})
+
+        } catch (error) {
+            res.status(500).send(error.message)
+        }
+    }
 
 }
 

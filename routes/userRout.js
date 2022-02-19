@@ -43,6 +43,7 @@ router.post('/videoGallary', videoUpload, userController.insertTrainerVideoGalla
 router.put('/updateVideoGallary', videoUpload, userController.updateTrainerVideoGallery); // Update Video upload for Trainer
 router.get('/viewVideo/:id',  userController.getTrainerVideo); // Delete uploaded video for Trainer
 router.delete('/deleteVideoGallary/:id',  userController.deleteTrainerVideoGallery); // Delete uploaded video for Trainer
+router.put('/updateAvailability',  userController.updateTrainerAvailability); // Delete uploaded video for Trainer
 
 
 module.exports = router;
