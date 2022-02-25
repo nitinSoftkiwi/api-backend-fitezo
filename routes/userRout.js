@@ -2,6 +2,9 @@ const router = require('express').Router();
 const { required } = require("nodemon/lib/config");
 const userController = require("../Controllers/userController");
 const multer = require('multer');
+const { route } = require('.');
+const nodemailer = require('nodemailer')
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -31,6 +34,7 @@ router.put('/updateById/:id', fileUpload, userController.updateUserById); //Upda
 router.put('/updateUser', fileUpload, userController.updateUser); //Update User
 router.get('/getCountByType', userController.getCountByType); //Get User Count
 router.get('/search/:id', userController.userSearch); //Search Data for Users
+router.get('/trainerSearch', userController.trainerSearch) // search trainer data (lang, gender,categoryTrainer)
 router.put('/status/:id', userController.updateStatus); // Status Update
 router.put('/categoryTrainer/:id', userController.updateCategoryTrainer); // Status Update
 router.post('/createFitness', userController.createCalculator); //Create Fitness Data
@@ -44,6 +48,7 @@ router.put('/updateVideoGallary', videoUpload, userController.updateTrainerVideo
 router.get('/viewVideo/:id',  userController.getTrainerVideo); // Delete uploaded video for Trainer
 router.delete('/deleteVideoGallary/:id',  userController.deleteTrainerVideoGallery); // Delete uploaded video for Trainer
 router.put('/updateAvailability',  userController.updateTrainerAvailability); // Delete uploaded video for Trainer
+router.post('/vacationTrainer', userController.vacationTrainer); //vacation tariner add startdate and enddate
 
 
 module.exports = router;

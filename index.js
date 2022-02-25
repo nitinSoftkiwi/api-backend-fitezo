@@ -1,5 +1,6 @@
 const express = require('express');
 var bodyParser = require('body-parser')
+const nodemailer = require('nodemailer')
 
 const http = require('http');
 const dotenv = require('dotenv');
@@ -49,5 +50,29 @@ app.use('/api', userRoutes);
 
 app.get('/',(req , res) => {
     res.send('Hi Fitezo')
+})
+const contactEmail = {
+    //this is the authentication for sending email.
+host: 'smtp.gmail.com',
+// port: 465,
+port: 587,
+secure: true, // use TLS
+//create a .env file and define the process.env variables 
+   // with the credentials you want to use for your email server.
+auth: {
+    Username: 'fitezo.fit@gmail.com',
+    Password: '100fitezo200',
+},
+}
+
+const transporter = nodemailer.createTransport(contactEmail)
+    transporter.verify((error, success) => {
+if (error) {
+    //if error happened code ends here
+    console.error('niyniyninynyniyn',error)
+} else {
+    //this means success
+    console.log('Ready to send mail!',success)
+}
 })
 app.listen(process.env.PORT,() => console.log("server is running on Port ::: "+process.env.PORT));
