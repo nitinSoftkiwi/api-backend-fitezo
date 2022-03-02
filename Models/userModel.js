@@ -90,6 +90,10 @@ var schema = new mongoose.Schema(
           reasons: {
               type: String,
               require: true
+          },
+          status: {
+              type: Number,
+              default: 0 //0 means show notification , 1 means hide notification
           }
         },
       ],

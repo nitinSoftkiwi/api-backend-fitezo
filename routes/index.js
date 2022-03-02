@@ -29,8 +29,8 @@ secure: true, // use TLS
 //create a .env file and define the process.env variables 
    // with the credentials you want to use for your email server.
 auth: {
-    Username: 'fitezo.fit@gmail.com',
-    Password: '100fitezo200',
+    Username: "'" +process.env.SMTP_TO_EMAIL+ "'",
+    Password: "'" +process.env.SMTP_TO_PASSWORD+ "'",
 },
 }
 

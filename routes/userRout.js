@@ -43,12 +43,15 @@ router.post('/createCategoryTrainer', categoryCoachImg, userController.createHea
 router.get('/getCategoryTrainer',  userController.getHeaderGetACoachAdmin); //Get All CategoryTrainer header change in get a coach api  with pagination
 router.get('/coachSearch/:id', userController.getHeaderCoachSearch); // Search Coach
 router.post('/rating/:id', userController.insertRating); //Rating
-router.post('/videoGallary', videoUpload, userController.insertTrainerVideoGallary); // Video upload for Trainer
+router.post('/videoGallary/:id', videoUpload, userController.insertTrainerVideoGallary); // Video upload for Trainer
 router.put('/updateVideoGallary', videoUpload, userController.updateTrainerVideoGallery); // Update Video upload for Trainer
 router.get('/viewVideo/:id',  userController.getTrainerVideo); // Delete uploaded video for Trainer
 router.delete('/deleteVideoGallary/:id',  userController.deleteTrainerVideoGallery); // Delete uploaded video for Trainer
+router.delete('/deleteAdminVideoGallary/:id/:trainerId',  userController.deleteAdminTrainerVideoGallery); // Delete uploaded video admin for Trainer
 router.put('/updateAvailability',  userController.updateTrainerAvailability); // Delete uploaded video for Trainer
 router.post('/vacationTrainer', userController.vacationTrainer); //vacation tariner add startdate and enddate
-
+router.get('/vacationTrainerStatus', userController.VacationNotificationTrainer) // vacation Trainer Status get noitifictation use admin
+router.put('/vacationTrainerStatusChange/:id', userController.VacationNotificationTrainerChange) // vacation Trainer Status get noitifictation use admin
+router.get('/videoShow/:id', userController.showVideoTrainer) // show video admin in personal trainer
 
 module.exports = router;

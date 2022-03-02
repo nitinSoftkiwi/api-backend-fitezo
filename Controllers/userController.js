@@ -8,6 +8,9 @@ const { send } = require("process");
 const { ObjectId } = require("mongoose").Types;
 const { query } = require("express");
 require("dotenv").config();
+const dotenv = require('dotenv');
+
+dotenv.config();
 const nodemailer = require("nodemailer");
 
 module.exports = {
@@ -1514,8 +1517,7 @@ module.exports = {
   async insertTrainerVideoGallary(req, res) {
     try {
       const videoPtah = req.file.path;
-      // console.log("Pathhhhh::::", videoPtah)
-      const trainerID = await userModel.findById(req.auth.id);
+      const trainerID = await userModel.findById({ _id: req.params.id });
       const trainerVidID = trainerID.trainerVideo;
       if (!trainerID) {
         return res.status(500).send("Id is not valid");
@@ -1526,9 +1528,8 @@ module.exports = {
         vidDescription: req.body.vidDescription,
         vidPath: videoPtah,
       });
-
       const insertVideo = await userModel.findByIdAndUpdate(
-        { _id: req.auth.id },
+        { _id: req.params.id },
         { $set: { trainerVideo: trainerVidID } },
         { new: true }
       );
@@ -1536,6 +1537,18 @@ module.exports = {
     } catch (error) {
       res.status(500).send(error.message);
     }
+  },
+  //show all video trainer
+  async showVideoTrainer (req, res){
+      try {
+          const trainerId = await userModel.findById({_id : req.params.id});
+          res.status(200).json({
+            message: "Video  Record Show!",
+            data: trainerId,
+          });
+      } catch (error) {
+        res.status(404).json({ message: error.message });
+      }
   },
   // update trainer uploaded videos
   async updateTrainerVideoGallery(req, res) {
@@ -1578,6 +1591,19 @@ module.exports = {
     try {
       const updateTrainerVideo = await userModel.updateOne(
         { _id: req.auth.id },
+        { $pull: { trainerVideo: { _id: req.params.id } } },
+        { new: true }
+      );
+      res.send({ message: "Video Details Deleted successfully!" });
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  },
+  // Delete admin ==== trainer Video
+  async deleteAdminTrainerVideoGallery(req, res) {
+    try {
+      const updateAdminTrainerVideo = await userModel.updateOne(
+        { _id: req.params.trainerId },
         { $pull: { trainerVideo: { _id: req.params.id } } },
         { new: true }
       );
@@ -1659,14 +1685,14 @@ module.exports = {
       const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: "fitezo.fit@gmail.com",
-          pass: "100fitezo200",
+          user: process.env.SMTP_TO_EMAIL,
+          pass: process.env.SMTP_TO_PASSWORD,
         },
       });
       transporter
         .sendMail({
-          from: "fitezo.fit@gmail.com", // sender address
-          to: "nitin@softkiwi.co.in", // list of receivers
+          from: "'" +process.env.SMTP_TO_EMAIL+ "'", // sender address
+          to: 'nitin@softkiwi.co.in', // list of receivers
           subject: "Vaction Leave for trainer Start Date and End Date ✔ no@reply auto Gen", // Subject line
           text: `
            Trainer Name: ${req.body.firstName}-${req.body.lastName}
@@ -1713,6 +1739,33 @@ module.exports = {
       res.status(500).send(error.message);
     }
   },
+  //vacation Trainer notifications admin side
+  async VacationNotificationTrainer (req, res){
+      try {
+          //const userId = await userModel.findById({_id : req.params.id});
+          const trainer = await userModel.find({userType: 'trainer', vacationTrainer: { $exists: true, $ne: [] }, 'vacationTrainer.status': 0 });
+        //   console.log('Vactionnn Tainer', trainer.length);
+          res.status(200).json({
+            message: "Vaction Trainer Record!",
+            data: trainer,
+          });
+      } catch (error) {
+        res.status(404).json({ message: error.message });
+      }
+  },
+  //vacation Trainer change status for admin side
+  async VacationNotificationTrainerChange (req, res){
+    try {
+        // console.log('userid DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD', req.params)
+        const trainerData = await userModel.updateOne({'vacationTrainer._id': req.params.id}, {$set: {'vacationTrainer.$.status': 1}});
+        res.status(200).json({
+            message: "Vaction Trainer Status Change Record!",
+            data: trainerData,
+          })
+    } catch (error) {
+        res.status(405).json({message: error.message})
+    }
+  }
 };
 
 //userModel.findOne({}).then(user => console.log('User', user));
