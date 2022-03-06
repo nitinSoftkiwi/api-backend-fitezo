@@ -48,10 +48,12 @@ router.put('/updateVideoGallary', videoUpload, userController.updateTrainerVideo
 router.get('/viewVideo/:id',  userController.getTrainerVideo); // Delete uploaded video for Trainer
 router.delete('/deleteVideoGallary/:id',  userController.deleteTrainerVideoGallery); // Delete uploaded video for Trainer
 router.delete('/deleteAdminVideoGallary/:id/:trainerId',  userController.deleteAdminTrainerVideoGallery); // Delete uploaded video admin for Trainer
-router.put('/updateAvailability',  userController.updateTrainerAvailability); // Delete uploaded video for Trainer
+router.put('/updateAvailability/:id',  userController.updateTrainerAvailability); // Delete uploaded video for Trainer
 router.post('/vacationTrainer', userController.vacationTrainer); //vacation tariner add startdate and enddate
-router.get('/vacationTrainerStatus', userController.VacationNotificationTrainer) // vacation Trainer Status get noitifictation use admin
-router.put('/vacationTrainerStatusChange/:id', userController.VacationNotificationTrainerChange) // vacation Trainer Status get noitifictation use admin
-router.get('/videoShow/:id', userController.showVideoTrainer) // show video admin in personal trainer
+router.get('/vacationTrainerStatus', userController.VacationNotificationTrainer); // vacation Trainer Status get noitifictation use admin
+router.put('/vacationTrainerStatusChange/:id', userController.VacationNotificationTrainerChange); // vacation Trainer Status get noitifictation use admin
+router.get('/videoShow/:id', userController.showVideoTrainer); // show video admin in personal trainer
+router.post('/bookingTrainer', userController.BookingSlotByUser); // user book slot in trainer
+router.put('/userSlotBookingStatus/:id', userController.userSlotBooking); // user book slot status chnage oto 2 is disable
 
 module.exports = router;

@@ -1628,13 +1628,14 @@ module.exports = {
   },
   //update Trainer Availability
   async updateTrainerAvailability(req, res) {
+      
     try {
       let slotArray = [];
       req.body.slots.forEach((slotData) => {
         slotArray.push(slotData);
       });
-      const trainerID = await userModel.findOne({ _id: req.auth.id });
-      //console.log("IDDDDDD", trainerID)
+      const trainerID = await userModel.findOne({ _id: req.params.id });
+      console.log(req.body,"IDDDDDD", trainerID)
       const indexId = req.body;
       const trainerAvailabilityDetails = trainerID.trainerAvailabilities;
       const checkIdx = trainerAvailabilityDetails.findIndex(
@@ -1647,7 +1648,7 @@ module.exports = {
         trainerAvailabilityDetails[checkIdx].status = 0;
       }
       const updateAvailability = await userModel.findOneAndUpdate(
-        { _id: req.auth.id },
+        { _id: req.params.id },
         { $set: { trainerAvailabilities: trainerAvailabilityDetails } },
         { new: true }
       );
@@ -1764,6 +1765,76 @@ module.exports = {
           })
     } catch (error) {
         res.status(405).json({message: error.message})
+    }
+  },
+  //booking Solt and user
+  async BookingSlotByUser (req, res){
+      try {
+          const trainerId = await userModel.findById({_id: req.auth.id});
+          const trainerBooking = trainerId.bookingSlot;
+          if (!trainerId) {
+            return res.status(500).send("Id is not valid");
+          };
+          trainerBooking.push({
+              _id: ObjectId(),
+              package: req.body.package,
+              slotId: req.body.slotId,
+              userId: req.body.userId,
+              packageSession: req.body.packageSession,
+              fromTime: req.body.fromTime,
+              toTime: req.body.toTime,
+              status: req.body.status
+          });
+          const insertTrainerBooking = await userModel.findByIdAndUpdate(
+              { _id: req.auth.id},
+              {$set: { bookingSlot: trainerBooking }},
+              {new: true}
+              )
+              res.send({ message: "booking Slot book Successfully!", data: insertTrainerBooking });
+      } catch (error) {
+        res.status(500).send(error.message);
+      }
+  },
+  //status slot change user side
+  async userSlotBooking (req, res){
+      try {
+        //   console.log('juisbdvuidfb',req.params.id, req.body);
+          
+          const trainerID = await userModel.findOne({ _id: req.params.id });
+          const indexId = req.body;
+
+        const trainerAvailabilityDetails = trainerID.trainerAvailabilities;
+        const checkIdx = trainerAvailabilityDetails.findIndex(
+            //availId slot id
+          (availId) => availId._id == indexId.slotId
+        );
+
+        if (checkIdx != -1) {
+             const slotIdx = trainerAvailabilityDetails[checkIdx].slots.filter((idx) => idx.toTime === indexId.toTime && idx.fromTime === indexId.fromTime)
+            //  trainerAvailabilityDetails[checkIdx].status = 2;
+            slotIdx[0].status =2;
+            for (let index = 0; index < trainerAvailabilityDetails.length; index++) {
+                const element = trainerAvailabilityDetails[index];
+                const allStatus = element.slots.filter((idx) => idx.toTime === indexId.toTime && idx.fromTime === indexId.fromTime) 
+                // console.log( allStatus ,"jvbereivbervberibvueruviber")
+                if (allStatus.length > 0 ) {
+                    allStatus[0].status = 2;
+                }    
+                    // console.log("all status :::::::::::::::::::::::",allStatus);
+                    // console.log(slotIdx[0].status ,'SLOT IDX',trainerAvailabilityDetails[checkIdx].slots, trainerAvailabilityDetails);
+            }
+        }
+          const updateAvailability = await userModel.findOneAndUpdate(
+            { _id: req.params.id },
+            { $set: { trainerAvailabilities: trainerAvailabilityDetails } },
+            { new: true }
+          );
+          res.send({
+            message: "User slot book has been updated successfully!",
+            data: updateAvailability,
+          });
+    } catch (error) {
+        res.status(500).send(error.message);
     }
   }
 };

@@ -219,6 +219,45 @@ var schema = new mongoose.Schema(
       ],
       default: [],
     },
+    bookingSlot: {
+      type: [
+        {
+          package: {
+            type: String,
+            require: true
+          },
+          slotId: {
+            type: String,
+            require: true
+          },
+          userId: {
+              type: String,
+              require: true
+          },
+          packageSession: {
+              type: String,
+              require: true 
+          },
+          fromTime: {
+            type: String,
+            require: true
+          },
+          toTime:{
+              type: String,
+              require: true
+          },
+          payment:{
+            type: String,
+            default: null
+          },
+          status: {
+            type: Number, // 2- Disable
+            default: null,
+          },
+        },
+      ],
+      default: [],
+    },
     categoryTrainer: {
       type: Number,
       default: 0, // categoryTrainer 0 is stander and 1 is premium
