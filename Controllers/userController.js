@@ -1780,6 +1780,7 @@ module.exports = {
               package: req.body.package,
               slotId: req.body.slotId,
               userId: req.body.userId,
+              customerId: req.body.customerId,
               packageSession: req.body.packageSession,
               fromTime: req.body.fromTime,
               toTime: req.body.toTime,
@@ -1835,6 +1836,14 @@ module.exports = {
           });
     } catch (error) {
         res.status(500).send(error.message);
+    }
+  },
+  //Booking Notification User sen trainer 
+  async BookingUserShowStariner (req, res){
+    try {
+      const trainerId = await userModel.findOne({_id: req.auth.id})
+    } catch (error) {
+      
     }
   }
 };

@@ -246,6 +246,10 @@ var schema = new mongoose.Schema(
               type: String,
               require: true
           },
+          customerId: {
+            type: String,
+            require: true
+          },
           payment:{
             type: String,
             default: null
