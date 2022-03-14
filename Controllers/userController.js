@@ -1769,13 +1769,17 @@ module.exports = {
   },
   //booking Solt and user
   async BookingSlotByUser (req, res){
+    //userId trainer Id and customer Id is User ID
       try {
-          const trainerId = await userModel.findById({_id: req.auth.id});
+          const checkId = await userModel.findById({_id: req.auth.id});
+          const trainerId = await userModel.findById(req.body.userId);
+          //  console.log('Nitinitnitnitnitnitinnticheck customer Id ', req.body.userId);
+           const userBooking = checkId.bookingSlot;
           const trainerBooking = trainerId.bookingSlot;
-          if (!trainerId) {
-            return res.status(500).send("Id is not valid");
+          if (!checkId && trainerId) {
+            return res.status(404).send("Id is not valid");
           };
-          trainerBooking.push({
+          userBooking.push({
               _id: ObjectId(),
               package: req.body.package,
               slotId: req.body.slotId,
@@ -1786,12 +1790,28 @@ module.exports = {
               toTime: req.body.toTime,
               status: req.body.status
           });
-          const insertTrainerBooking = await userModel.findByIdAndUpdate(
+          trainerBooking.push({
+            _id: ObjectId(),
+            package: req.body.package,
+            slotId: req.body.slotId,
+            userId: req.body.userId,
+            customerId: req.body.customerId,
+            packageSession: req.body.packageSession,
+            fromTime: req.body.fromTime,
+            toTime: req.body.toTime,
+            status: req.body.status
+          })
+          const insertUserBooking = await userModel.findByIdAndUpdate(
               { _id: req.auth.id},
-              {$set: { bookingSlot: trainerBooking }},
+              {$set: { bookingSlot: userBooking }},
               {new: true}
               )
-              res.send({ message: "booking Slot book Successfully!", data: insertTrainerBooking });
+          const insertTrainerBooking = await userModel.findByIdAndUpdate(
+            {_id : req.body.userId},
+            {$set: { bookingSlot: trainerBooking }},
+            { new: true }
+          )
+              res.send({ message: "booking Slot book Successfully!",data:insertUserBooking, data: insertTrainerBooking });
       } catch (error) {
         res.status(500).send(error.message);
       }
@@ -1838,12 +1858,22 @@ module.exports = {
         res.status(500).send(error.message);
     }
   },
-  //Booking Notification User sen trainer 
+  //Booking Slot And User send trainer 
   async BookingUserShowStariner (req, res){
     try {
       const trainerId = await userModel.findOne({_id: req.auth.id})
+      const customerId = await userModel.find({_id: {$in: req.body}});
+     // console.log("customer id ", customerId);
+      if (!trainerId && customerId) {
+        return res.status(404).send("Id is not valid");
+      };
+      res.status(200).json({
+        message: "User Record As Per Request Show!",
+        data: customerId,
+      });
+
     } catch (error) {
-      
+      res.status(404).json({ message: error.message });
     }
   }
 };
