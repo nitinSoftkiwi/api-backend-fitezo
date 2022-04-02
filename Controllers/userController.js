@@ -2002,7 +2002,7 @@ module.exports = {
         running: req.body.running,
         cycling: req.body.cycling,
         yoga: req.body.yoga,
-        workoutDay: moment().format('dddd')
+        workoutDay: moment().format('dddd') 
     });
       const workout = await userModel.findByIdAndUpdate(
         {  _id: req.auth.id },
