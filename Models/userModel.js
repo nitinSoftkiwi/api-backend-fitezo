@@ -76,25 +76,29 @@ var schema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    quickBloxData: {
+      type: [],
+      default: null,
+    },
     vacationTrainer: {
       type: [
         {
           startDate: {
             type: String,
-            require: true
+            require: true,
           },
           endDate: {
             type: String,
-            require: true
+            require: true,
           },
           reasons: {
-              type: String,
-              require: true
+            type: String,
+            require: true,
           },
           status: {
-              type: Number,
-              default: 0 //0 means show notification , 1 means hide notification
-          }
+            type: Number,
+            default: 0, //0 means show notification , 1 means hide notification
+          },
         },
       ],
       default: [],
@@ -215,7 +219,8 @@ var schema = new mongoose.Schema(
             type: String,
             default: null,
           },
-        },{ timestamps: true }
+        },
+        { timestamps: true },
       ],
       default: [],
     },
@@ -224,35 +229,43 @@ var schema = new mongoose.Schema(
         {
           package: {
             type: String,
-            require: true
+            require: true,
           },
           slotId: {
             type: String,
-            require: true
+            require: true,
           },
           userId: {
-              type: String,
-              require: true
+            type: String,
+            require: true,
           },
           packageSession: {
-              type: String,
-              require: true 
+            type: String,
+            require: true,
           },
           fromTime: {
             type: String,
-            require: true
+            require: true,
           },
-          toTime:{
-              type: String,
-              require: true
+          toTime: {
+            type: String,
+            require: true,
           },
           customerId: {
             type: String,
-            require: true
+            require: true,
           },
-          payment:{
+          payment: {
             type: String,
-            default: null
+            default: null,
+          },
+          bookingStatus: {
+            type: Number,
+            default: 0, // 0- Pending, 1- Booked, 2- Cancelled
+          },
+          createdAt: {
+            type: Date,
+            default: Date.now(),
           },
           status: {
             type: Number, // 2- Disable
@@ -261,6 +274,13 @@ var schema = new mongoose.Schema(
         },
       ],
       default: [],
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+    },
+    updatedAt: {
+      type: Date,
     },
     categoryTrainer: {
       type: Number,
@@ -273,6 +293,34 @@ var schema = new mongoose.Schema(
     userType: {
       type: String,
       default: "user",
+    },
+    workoutStatistic: {
+      type: [
+        {
+          running: {
+            type: String,
+            default: null
+          },
+          cycling:{
+            type: String,
+            default: null
+          },
+          yoga: {
+            type: String,
+            default: null
+          },
+           createdAt: {
+            type: Date,
+            default: Date.now(),
+          },
+          updatedAt: {
+            type: Date,
+          },
+          workoutDay: {
+            type: String
+          }
+        }
+      ]
     },
     status: {
       type: Number,

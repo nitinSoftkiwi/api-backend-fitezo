@@ -9,9 +9,79 @@ const { ObjectId } = require("mongoose").Types;
 const { query } = require("express");
 require("dotenv").config();
 const dotenv = require('dotenv');
+var moment = require('moment');
 
 dotenv.config();
 const nodemailer = require("nodemailer");
+// Quick blocks
+const axios = require("axios").default;
+
+async function getQBSessionToken () {
+
+        var data = JSON.stringify({
+            "application_id": "95771",
+            "auth_key": "X4EzAusgQsK75nK",
+            "timestamp": "1645437241",
+            "nonce": "7334",
+            "signature": "206cd408a3785aaa66d3c9fe02c7885acf182b04"
+          });
+          
+          var config = {
+            method: 'post',
+            url: 'https://api.quickblox.com/session.json',
+            headers: { 
+              'Content-Type': 'application/json'
+            },
+            data : data
+          };
+         let token ;
+           await  axios(config)
+          .then(function (response) {
+            //console.log(JSON.stringify(response.data.session.token));
+            return token = response.data.session.token;
+          })
+          .catch(function (error) {
+            //console.log(error);
+            return token =  error
+          });
+          return token
+}
+
+async function createQBUser(token , email, phone, userType ) {
+var data = JSON.stringify({
+  "user": {
+    "login": email,
+    "password": `QB@${phone}`,
+    "full_name": phone,
+    "phone": phone,
+    "tag_list": userType,
+    "age_over16": true
+  }
+});
+
+var config = {
+  method: 'post',
+  url: 'https://api.quickblox.com/users.json',
+  headers: { 
+    'QB-Token': token, 
+    'Content-Type': 'application/json'
+  },
+  data : data
+};
+let QBuser;
+await axios(config)
+.then(function (response) {
+ //console.log(JSON.stringify(response.data));
+  return QBuser = response.data.user;
+})
+.catch(function (error) {
+ // console.log(error);
+  return QBuser = error;
+});
+return QBuser;
+
+}
+
 
 module.exports = {
   //Create User
@@ -869,6 +939,7 @@ module.exports = {
       ) {
         return res.status(400).send({ message: "Content can not be empty!" });
       }
+      console.log("check all data require", req.body);
       // Validate user input
       if (!(email && password && firstName && lastName && phone)) {
         return res.status(400).json("All input is required!");
@@ -901,6 +972,9 @@ module.exports = {
           });
         }
       } else if (req.body.userType === "trainer") {
+        //quickblox sesion
+        // const getSession = await getQBSessionToken();
+
         // check if user already exist
         const oldUser = await userModel.findOne({ email });
         if (oldUser) {
@@ -919,8 +993,17 @@ module.exports = {
             language,
             gender,
           });
+          // let QBarr = [] ;
+          // if (getSession) {
+          //     const QBreg = await createQBUser(getSession, req.body.phone, req.body.email, req.body.userType);
+          //    // console.log("QBBBBBBRegistration ::::::::::::::: ", QBreg)
+          //    if(QBreg){
+          //     QBarr.push(QBreg)
+          //    }
+          // }
           const updatedUser = await userModel.findOneAndUpdate(
             { _id: user._id },
+            // { $set: { userType: req.body.userType, quickBloxData: QBarr  } },
             { $set: { userType: req.body.userType } },
             { new: true }
           );
@@ -931,6 +1014,9 @@ module.exports = {
           // console.log(user,'heloooooooooo')
         }
       } else if (req.body.userType === "user") {
+                //quickblox sesion
+        // const getSession = await getQBSessionToken();
+
         // check if user already exist
         const oldUser = await userModel.findOne({ email });
         if (oldUser) {
@@ -943,8 +1029,17 @@ module.exports = {
             password: encryptedPassword,
             phone,
           });
+          // let QBarr = [] ;
+          // if (getSession) {
+          //     const QBreg = await createQBUser(getSession, req.body.phone, req.body.email, req.body.userType );
+          //    // console.log("QBBBBBBRegistration ::::::::::::::: ", QBreg)
+          //    if(QBreg){
+          //     QBarr.push(QBreg)
+          //    }
+          // }
           const updatedUser = await userModel.findOneAndUpdate(
             { _id: user._id },
+            // { $set: { userType: req.body.userType, quickBloxData: QBarr } },
             { $set: { userType: req.body.userType } },
             { new: true }
           );
@@ -1874,6 +1969,50 @@ module.exports = {
 
     } catch (error) {
       res.status(404).json({ message: error.message });
+    }
+  },
+  //workout Statistic by user add
+  async WorkoutStatistic (req, res){
+    try {
+      const {
+        running,
+        cycling,
+        yoga,
+      } = req.body;
+      if (
+        !req.body.running &&
+        !req.body.cycling &&
+        !req.body.yoga
+      ) {
+        return res.status(400).send({ message: "Content can not be empty!" });
+      }
+      // console.log("check all data require", req.body);
+      // Validate user input
+      if (!(running && cycling && yoga )) {
+        return res.status(400).json("All input is required!");
+      }
+      const checkId = await userModel.findById({_id: req.auth.id});
+      const userWorkout = checkId.workoutStatistic;
+      if(!checkId){
+        return res.status(404).send("Id is not valid");
+      }
+      
+      userWorkout.push({
+        _id: ObjectId(),
+        running: req.body.running,
+        cycling: req.body.cycling,
+        yoga: req.body.yoga,
+        workoutDay: moment().format('dddd')
+    });
+      const workout = await userModel.findByIdAndUpdate(
+        {  _id: req.auth.id },
+        { $set: { workoutStatistic: userWorkout } },
+        { new: true }
+      );
+      res.send({ message: "workout Statistic Submitted Successfully!", data: workout });
+
+    } catch (error) {
+      res.status(500).send(error.message);
     }
   }
 };

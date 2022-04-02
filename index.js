@@ -10,7 +10,7 @@ const app = express();
 dotenv.config();
 
 console.log(process.env.DB_CONNECT);
-//By Tulsi connect to db
+//By Nitin connect to db
 mongoose.connect(process.env.DB_CONNECT)
     .then((connectioninfo) => console.log("connected to db"))
     .catch(err => console.log('Error connecting database:', err))

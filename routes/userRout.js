@@ -56,5 +56,5 @@ router.get('/videoShow/:id', userController.showVideoTrainer); // show video adm
 router.post('/bookingTrainer', userController.BookingSlotByUser); // user book slot in trainer
 router.put('/userSlotBookingStatus/:id', userController.userSlotBooking); // user book slot status chnage oto 2 is disable
 router.post('/userbookingInformation', userController.BookingUserShowStariner); // user book slot show tariner informations
-
+router.post('/userCreateWorkoutStatistic', userController.WorkoutStatistic); //user add new record informationonly user
 module.exports = router;
