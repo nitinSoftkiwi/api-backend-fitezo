@@ -23,7 +23,7 @@ const mediaFilter = (req, file, cb) => {
 const maxSize = 100 * 1024 * 1024; // for 1MB
 const fileUpload = multer({ storage: storage }).fields([{name: "profileImage", maxCount: 1}, {name: "certification", maxCount: 5}, {name: "signature", maxCount: 1}]);
 const categoryCoachImg = multer({ storage: storage }).fields([{name: "imageTypeTrainer", maxCount: 1}]);
-const DietImg = multer({ storage: storage }).fields([ {name: "dietImage", maxCount: 1},]);
+const DietImg = multer({ storage: storage }).single([ {name: "dietImage", maxCount: 1},]);
 const videoUpload = multer({ storage: storage, limits: { fileSize: maxSize } }).single('vidPath');
 
 router.post('/create', userController.create); //Create Users
