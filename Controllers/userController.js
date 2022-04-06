@@ -8,80 +8,77 @@ const { send } = require("process");
 const { ObjectId } = require("mongoose").Types;
 const { query } = require("express");
 require("dotenv").config();
-const dotenv = require('dotenv');
-var moment = require('moment');
+const dotenv = require("dotenv");
+var moment = require("moment");
 
 dotenv.config();
 const nodemailer = require("nodemailer");
 // Quick blocks
 const axios = require("axios").default;
 
-async function getQBSessionToken () {
+async function getQBSessionToken() {
+  var data = JSON.stringify({
+    application_id: "95771",
+    auth_key: "X4EzAusgQsK75nK",
+    timestamp: "1645437241",
+    nonce: "7334",
+    signature: "206cd408a3785aaa66d3c9fe02c7885acf182b04",
+  });
 
-        var data = JSON.stringify({
-            "application_id": "95771",
-            "auth_key": "X4EzAusgQsK75nK",
-            "timestamp": "1645437241",
-            "nonce": "7334",
-            "signature": "206cd408a3785aaa66d3c9fe02c7885acf182b04"
-          });
-          
-          var config = {
-            method: 'post',
-            url: 'https://api.quickblox.com/session.json',
-            headers: { 
-              'Content-Type': 'application/json'
-            },
-            data : data
-          };
-         let token ;
-           await  axios(config)
-          .then(function (response) {
-            //console.log(JSON.stringify(response.data.session.token));
-            return token = response.data.session.token;
-          })
-          .catch(function (error) {
-            //console.log(error);
-            return token =  error
-          });
-          return token
+  var config = {
+    method: "post",
+    url: "https://api.quickblox.com/session.json",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    data: data,
+  };
+  let token;
+  await axios(config)
+    .then(function (response) {
+      //console.log(JSON.stringify(response.data.session.token));
+      return (token = response.data.session.token);
+    })
+    .catch(function (error) {
+      //console.log(error);
+      return (token = error);
+    });
+  return token;
 }
 
-async function createQBUser(token , email, phone, userType ) {
-var data = JSON.stringify({
-  "user": {
-    "login": email,
-    "password": `QB@${phone}`,
-    "full_name": phone,
-    "phone": phone,
-    "tag_list": userType,
-    "age_over16": true
-  }
-});
+async function createQBUser(token, email, phone, userType) {
+  var data = JSON.stringify({
+    user: {
+      login: email,
+      password: `QB@${phone}`,
+      full_name: phone,
+      phone: phone,
+      tag_list: userType,
+      age_over16: true,
+    },
+  });
 
-var config = {
-  method: 'post',
-  url: 'https://api.quickblox.com/users.json',
-  headers: { 
-    'QB-Token': token, 
-    'Content-Type': 'application/json'
-  },
-  data : data
-};
-let QBuser;
-await axios(config)
-.then(function (response) {
- //console.log(JSON.stringify(response.data));
-  return QBuser = response.data.user;
-})
-.catch(function (error) {
- // console.log(error);
-  return QBuser = error;
-});
-return QBuser;
-
+  var config = {
+    method: "post",
+    url: "https://api.quickblox.com/users.json",
+    headers: {
+      "QB-Token": token,
+      "Content-Type": "application/json",
+    },
+    data: data,
+  };
+  let QBuser;
+  await axios(config)
+    .then(function (response) {
+      //console.log(JSON.stringify(response.data));
+      return (QBuser = response.data.user);
+    })
+    .catch(function (error) {
+      // console.log(error);
+      return (QBuser = error);
+    });
+  return QBuser;
 }
-
 
 module.exports = {
   //Create User
@@ -1014,7 +1011,7 @@ module.exports = {
           // console.log(user,'heloooooooooo')
         }
       } else if (req.body.userType === "user") {
-                //quickblox sesion
+        //quickblox sesion
         // const getSession = await getQBSessionToken();
 
         // check if user already exist
@@ -1634,16 +1631,16 @@ module.exports = {
     }
   },
   //show all video trainer
-  async showVideoTrainer (req, res){
-      try {
-          const trainerId = await userModel.findById({_id : req.params.id});
-          res.status(200).json({
-            message: "Video  Record Show!",
-            data: trainerId,
-          });
-      } catch (error) {
-        res.status(404).json({ message: error.message });
-      }
+  async showVideoTrainer(req, res) {
+    try {
+      const trainerId = await userModel.findById({ _id: req.params.id });
+      res.status(200).json({
+        message: "Video  Record Show!",
+        data: trainerId,
+      });
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
   },
   // update trainer uploaded videos
   async updateTrainerVideoGallery(req, res) {
@@ -1723,14 +1720,13 @@ module.exports = {
   },
   //update Trainer Availability
   async updateTrainerAvailability(req, res) {
-      
     try {
       let slotArray = [];
       req.body.slots.forEach((slotData) => {
         slotArray.push(slotData);
       });
       const trainerID = await userModel.findOne({ _id: req.params.id });
-      console.log(req.body,"IDDDDDD", trainerID)
+      console.log(req.body, "IDDDDDD", trainerID);
       const indexId = req.body;
       const trainerAvailabilityDetails = trainerID.trainerAvailabilities;
       const checkIdx = trainerAvailabilityDetails.findIndex(
@@ -1759,7 +1755,6 @@ module.exports = {
   //vacation Trainer add sucessfully go mail for admin
   async vacationTrainer(req, res) {
     try {
-      
       const userID = await userModel.findById(req.auth.id);
       const userVacation = userID.vacationTrainer;
 
@@ -1787,9 +1782,10 @@ module.exports = {
       });
       transporter
         .sendMail({
-          from: "'" +process.env.SMTP_TO_EMAIL+ "'", // sender address
-          to: 'nitin@softkiwi.co.in', // list of receivers
-          subject: "Vaction Leave for trainer Start Date and End Date ✔ no@reply auto Gen", // Subject line
+          from: "'" + process.env.SMTP_TO_EMAIL + "'", // sender address
+          to: "nitin@softkiwi.co.in", // list of receivers
+          subject:
+            "Vaction Leave for trainer Start Date and End Date ✔ no@reply auto Gen", // Subject line
           text: `
            Trainer Name: ${req.body.firstName}-${req.body.lastName}
                   Start Date:
@@ -1830,191 +1826,253 @@ module.exports = {
         message: "Vacation Date Added successfully",
         data: createdVacation,
       });
-
     } catch (error) {
       res.status(500).send(error.message);
     }
   },
   //vacation Trainer notifications admin side
-  async VacationNotificationTrainer (req, res){
-      try {
-          //const userId = await userModel.findById({_id : req.params.id});
-          const trainer = await userModel.find({userType: 'trainer', vacationTrainer: { $exists: true, $ne: [] }, 'vacationTrainer.status': 0 });
-        //   console.log('Vactionnn Tainer', trainer.length);
-          res.status(200).json({
-            message: "Vaction Trainer Record!",
-            data: trainer,
-          });
-      } catch (error) {
-        res.status(404).json({ message: error.message });
-      }
+  async VacationNotificationTrainer(req, res) {
+    try {
+      //const userId = await userModel.findById({_id : req.params.id});
+      const trainer = await userModel.find({
+        userType: "trainer",
+        vacationTrainer: { $exists: true, $ne: [] },
+        "vacationTrainer.status": 0,
+      });
+      //   console.log('Vactionnn Tainer', trainer.length);
+      res.status(200).json({
+        message: "Vaction Trainer Record!",
+        data: trainer,
+      });
+    } catch (error) {
+      res.status(404).json({ message: error.message });
+    }
   },
   //vacation Trainer change status for admin side
-  async VacationNotificationTrainerChange (req, res){
+  async VacationNotificationTrainerChange(req, res) {
     try {
-        // console.log('userid DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD', req.params)
-        const trainerData = await userModel.updateOne({'vacationTrainer._id': req.params.id}, {$set: {'vacationTrainer.$.status': 1}});
-        res.status(200).json({
-            message: "Vaction Trainer Status Change Record!",
-            data: trainerData,
-          })
+      // console.log('userid DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD', req.params)
+      const trainerData = await userModel.updateOne(
+        { "vacationTrainer._id": req.params.id },
+        { $set: { "vacationTrainer.$.status": 1 } }
+      );
+      res.status(200).json({
+        message: "Vaction Trainer Status Change Record!",
+        data: trainerData,
+      });
     } catch (error) {
-        res.status(405).json({message: error.message})
+      res.status(405).json({ message: error.message });
     }
   },
   //booking Solt and user
-  async BookingSlotByUser (req, res){
+  async BookingSlotByUser(req, res) {
     //userId trainer Id and customer Id is User ID
-      try {
-          const checkId = await userModel.findById({_id: req.auth.id});
-          const trainerId = await userModel.findById(req.body.userId);
-          //  console.log('Nitinitnitnitnitnitinnticheck customer Id ', req.body.userId);
-           const userBooking = checkId.bookingSlot;
-          const trainerBooking = trainerId.bookingSlot;
-          if (!checkId && trainerId) {
-            return res.status(404).send("Id is not valid");
-          };
-          userBooking.push({
-              _id: ObjectId(),
-              package: req.body.package,
-              slotId: req.body.slotId,
-              userId: req.body.userId,
-              customerId: req.body.customerId,
-              packageSession: req.body.packageSession,
-              fromTime: req.body.fromTime,
-              toTime: req.body.toTime,
-              status: req.body.status
-          });
-          trainerBooking.push({
-            _id: ObjectId(),
-            package: req.body.package,
-            slotId: req.body.slotId,
-            userId: req.body.userId,
-            customerId: req.body.customerId,
-            packageSession: req.body.packageSession,
-            fromTime: req.body.fromTime,
-            toTime: req.body.toTime,
-            status: req.body.status
-          })
-          const insertUserBooking = await userModel.findByIdAndUpdate(
-              { _id: req.auth.id},
-              {$set: { bookingSlot: userBooking }},
-              {new: true}
-              )
-          const insertTrainerBooking = await userModel.findByIdAndUpdate(
-            {_id : req.body.userId},
-            {$set: { bookingSlot: trainerBooking }},
-            { new: true }
-          )
-              res.send({ message: "booking Slot book Successfully!",data:insertUserBooking, data: insertTrainerBooking });
-      } catch (error) {
-        res.status(500).send(error.message);
+    try {
+      const checkId = await userModel.findById({ _id: req.auth.id });
+      const trainerId = await userModel.findById(req.body.userId);
+      //  console.log('Nitinitnitnitnitnitinnticheck customer Id ', req.body.userId);
+      const userBooking = checkId.bookingSlot;
+      const trainerBooking = trainerId.bookingSlot;
+      if (!checkId && trainerId) {
+        return res.status(404).send("Id is not valid");
       }
-  },
-  //status slot change user side
-  async userSlotBooking (req, res){
-      try {
-        //   console.log('juisbdvuidfb',req.params.id, req.body);
-          
-          const trainerID = await userModel.findOne({ _id: req.params.id });
-          const indexId = req.body;
-
-        const trainerAvailabilityDetails = trainerID.trainerAvailabilities;
-        const checkIdx = trainerAvailabilityDetails.findIndex(
-            //availId slot id
-          (availId) => availId._id == indexId.slotId
-        );
-
-        if (checkIdx != -1) {
-             const slotIdx = trainerAvailabilityDetails[checkIdx].slots.filter((idx) => idx.toTime === indexId.toTime && idx.fromTime === indexId.fromTime)
-            //  trainerAvailabilityDetails[checkIdx].status = 2;
-            slotIdx[0].status =2;
-            for (let index = 0; index < trainerAvailabilityDetails.length; index++) {
-                const element = trainerAvailabilityDetails[index];
-                const allStatus = element.slots.filter((idx) => idx.toTime === indexId.toTime && idx.fromTime === indexId.fromTime) 
-                // console.log( allStatus ,"jvbereivbervberibvueruviber")
-                if (allStatus.length > 0 ) {
-                    allStatus[0].status = 2;
-                }    
-                    // console.log("all status :::::::::::::::::::::::",allStatus);
-                    // console.log(slotIdx[0].status ,'SLOT IDX',trainerAvailabilityDetails[checkIdx].slots, trainerAvailabilityDetails);
-            }
-        }
-          const updateAvailability = await userModel.findOneAndUpdate(
-            { _id: req.params.id },
-            { $set: { trainerAvailabilities: trainerAvailabilityDetails } },
-            { new: true }
-          );
-          res.send({
-            message: "User slot book has been updated successfully!",
-            data: updateAvailability,
-          });
+      userBooking.push({
+        _id: ObjectId(),
+        package: req.body.package,
+        slotId: req.body.slotId,
+        userId: req.body.userId,
+        customerId: req.body.customerId,
+        packageSession: req.body.packageSession,
+        fromTime: req.body.fromTime,
+        toTime: req.body.toTime,
+        status: req.body.status,
+      });
+      trainerBooking.push({
+        _id: ObjectId(),
+        package: req.body.package,
+        slotId: req.body.slotId,
+        userId: req.body.userId,
+        customerId: req.body.customerId,
+        packageSession: req.body.packageSession,
+        fromTime: req.body.fromTime,
+        toTime: req.body.toTime,
+        status: req.body.status,
+      });
+      const insertUserBooking = await userModel.findByIdAndUpdate(
+        { _id: req.auth.id },
+        { $set: { bookingSlot: userBooking } },
+        { new: true }
+      );
+      const insertTrainerBooking = await userModel.findByIdAndUpdate(
+        { _id: req.body.userId },
+        { $set: { bookingSlot: trainerBooking } },
+        { new: true }
+      );
+      res.send({
+        message: "booking Slot book Successfully!",
+        data: insertUserBooking,
+        data: insertTrainerBooking,
+      });
     } catch (error) {
-        res.status(500).send(error.message);
+      res.status(500).send(error.message);
     }
   },
-  //Booking Slot And User send trainer 
-  async BookingUserShowStariner (req, res){
+  //status slot change user side
+  async userSlotBooking(req, res) {
     try {
-      const trainerId = await userModel.findOne({_id: req.auth.id})
-      const customerId = await userModel.find({_id: {$in: req.body}});
-     // console.log("customer id ", customerId);
+      //   console.log('juisbdvuidfb',req.params.id, req.body);
+
+      const trainerID = await userModel.findOne({ _id: req.params.id });
+      const indexId = req.body;
+
+      const trainerAvailabilityDetails = trainerID.trainerAvailabilities;
+      const checkIdx = trainerAvailabilityDetails.findIndex(
+        //availId slot id
+        (availId) => availId._id == indexId.slotId
+      );
+
+      if (checkIdx != -1) {
+        const slotIdx = trainerAvailabilityDetails[checkIdx].slots.filter(
+          (idx) =>
+            idx.toTime === indexId.toTime && idx.fromTime === indexId.fromTime
+        );
+        //  trainerAvailabilityDetails[checkIdx].status = 2;
+        slotIdx[0].status = 2;
+        for (
+          let index = 0;
+          index < trainerAvailabilityDetails.length;
+          index++
+        ) {
+          const element = trainerAvailabilityDetails[index];
+          const allStatus = element.slots.filter(
+            (idx) =>
+              idx.toTime === indexId.toTime && idx.fromTime === indexId.fromTime
+          );
+          // console.log( allStatus ,"jvbereivbervberibvueruviber")
+          if (allStatus.length > 0) {
+            allStatus[0].status = 2;
+          }
+          // console.log("all status :::::::::::::::::::::::",allStatus);
+          // console.log(slotIdx[0].status ,'SLOT IDX',trainerAvailabilityDetails[checkIdx].slots, trainerAvailabilityDetails);
+        }
+      }
+      const updateAvailability = await userModel.findOneAndUpdate(
+        { _id: req.params.id },
+        { $set: { trainerAvailabilities: trainerAvailabilityDetails } },
+        { new: true }
+      );
+      res.send({
+        message: "User slot book has been updated successfully!",
+        data: updateAvailability,
+      });
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  },
+  //Booking Slot And User send trainer
+  async BookingUserShowStariner(req, res) {
+    try {
+      const trainerId = await userModel.findOne({ _id: req.auth.id });
+      const customerId = await userModel.find({ _id: { $in: req.body } });
+      // console.log("customer id ", customerId);
       if (!trainerId && customerId) {
         return res.status(404).send("Id is not valid");
-      };
+      }
       res.status(200).json({
         message: "User Record As Per Request Show!",
         data: customerId,
       });
-
     } catch (error) {
       res.status(404).json({ message: error.message });
     }
   },
   //workout Statistic by user add
-  async WorkoutStatistic (req, res){
+  async WorkoutStatistic(req, res) {
     try {
-      const {
-        running,
-        cycling,
-        yoga,
-      } = req.body;
-      if (
-        !req.body.running &&
-        !req.body.cycling &&
-        !req.body.yoga
-      ) {
+      const { running, cycling, yoga } = req.body;
+      if (!req.body.running && !req.body.cycling && !req.body.yoga) {
         return res.status(400).send({ message: "Content can not be empty!" });
       }
       // console.log("check all data require", req.body);
       // Validate user input
-      if (!(running && cycling && yoga )) {
+      if (!(running && cycling && yoga)) {
         return res.status(400).json("All input is required!");
       }
-      const checkId = await userModel.findById({_id: req.auth.id});
+      const checkId = await userModel.findById({ _id: req.auth.id });
       const userWorkout = checkId.workoutStatistic;
-      if(!checkId){
+      if (!checkId) {
         return res.status(404).send("Id is not valid");
       }
-      
+
       userWorkout.push({
         _id: ObjectId(),
         running: req.body.running,
         cycling: req.body.cycling,
         yoga: req.body.yoga,
-        workoutDay: moment().format('dddd') 
-    });
+        workoutDay: moment().format("dddd"),
+      });
       const workout = await userModel.findByIdAndUpdate(
-        {  _id: req.auth.id },
+        { _id: req.auth.id },
         { $set: { workoutStatistic: userWorkout } },
         { new: true }
       );
-      res.send({ message: "workout Statistic Submitted Successfully!", data: workout });
-
+      res.send({
+        message: "workout Statistic Submitted Successfully!",
+        data: workout,
+      });
     } catch (error) {
       res.status(500).send(error.message);
     }
-  }
+  },
+  //Dite plan  trainer  created per user( slot book trainer)
+  async DitePlanUser(req, res) {
+    try {
+      const checkId = await userModel.findById({ _id: req.auth.id }); //auth trainer Id
+      const trainerId = await userModel.findById(req.body.trainerId);
+      const userId = await userModel.findById(req.body.userId);
+      const userDietPlan = userId.workoutDitePlanPerUser;
+      // const userDitePlan = [];
+      if (!checkId && trainerId && userId) {
+        return res.status(404).send("Id is not valid");
+      }
+      if (userId.workoutDitePlanPerUser.dietImage != null && req.files.dietImage) {
+        fs.unlink("./" + userId.workoutDitePlanPerUser.dietImage, function (err) {
+          if (err) throw err;
+          // if no error, file has been deleted successfully
+          console.log("File deleted!");
+        });
+      }
+      const { body } = req;
+      console.log("data check req", req.body);
+      const profile = req.files.dietImage
+        ? req.files.dietImage[0].path
+        : userId.profile;
+
+      userDietPlan.push({
+        _id: ObjectId(),
+        trainerId: body.trainerId,
+        userId: body.userId,
+        dietHeading: body.dietHeading,
+        dietDescription: body.dietDescription,
+        dietTime: body.dietTime,
+        dietImage: profile,
+        dietType: body.dietType, //weekly, monthly
+        dietMealPlan: body.dietMealPlan, //lunch, dinner, breakfast, snack
+      });
+      const insertUserDitePlan = await userModel.findByIdAndUpdate(
+        { _id: req.body.userId },
+        { $set: { workoutDitePlanPerUser: userDietPlan } },
+        { new: true }
+      );
+      res.send({
+        message: "Dite Plan Submitted Successfully!",
+        data: insertUserDitePlan,
+      });
+    } catch (error) {
+      res.status(500).send(error.message);
+    }
+  },
+  
 };
 
 //userModel.findOne({}).then(user => console.log('User', user));

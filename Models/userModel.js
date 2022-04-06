@@ -322,6 +322,55 @@ var schema = new mongoose.Schema(
         }
       ]
     },
+    workoutDitePlanPerUser: {
+      type: [
+        {
+          trainerId: {
+            type: String,
+            required: true,
+          },
+          userId: {
+            type: String,
+            required: true,
+          },
+          dietHeading: {
+            type: String,
+            required: true,
+          },
+          dietDescription: {
+            type: String,
+            required: true,
+          },
+          dietTime: {
+            type: String,
+            required: true,
+          },
+          dietType: {
+            type: String, // monthly, weekly
+            required: true,
+          },
+          status: {
+            type: Number,
+            default: 0, // status 0 is Active and 1 is Inactive
+          }, 
+          createdAt: {
+            type: Date,
+            default: Date.now(),
+          },
+          updateAt: {
+            type: Date,
+          },
+          dietImage: {
+            type: String, //single upload
+            default: null,
+          },
+          dietMealPlan: {
+            type: String,   //breakfast,Dinner,Lunch, snake
+            default: "weekly",
+          },
+        }
+      ]
+    },
     status: {
       type: Number,
       default: 0, // status 0 is Active and 1 is Inactive

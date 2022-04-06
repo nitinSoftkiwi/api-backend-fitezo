@@ -23,6 +23,7 @@ const mediaFilter = (req, file, cb) => {
 const maxSize = 100 * 1024 * 1024; // for 1MB
 const fileUpload = multer({ storage: storage }).fields([{name: "profileImage", maxCount: 1}, {name: "certification", maxCount: 5}, {name: "signature", maxCount: 1}]);
 const categoryCoachImg = multer({ storage: storage }).fields([{name: "imageTypeTrainer", maxCount: 1}]);
+const DietImg = multer({ storage: storage }).fields([ {name: "dietImage", maxCount: 1},]);
 const videoUpload = multer({ storage: storage, limits: { fileSize: maxSize } }).single('vidPath');
 
 router.post('/create', userController.create); //Create Users
@@ -57,4 +58,5 @@ router.post('/bookingTrainer', userController.BookingSlotByUser); // user book s
 router.put('/userSlotBookingStatus/:id', userController.userSlotBooking); // user book slot status chnage oto 2 is disable
 router.post('/userbookingInformation', userController.BookingUserShowStariner); // user book slot show tariner informations
 router.post('/userCreateWorkoutStatistic', userController.WorkoutStatistic); //user add new record informationonly user
+router.post('/updateDitePlanByUser', DietImg, userController.DitePlanUser); // user dite plan created
 module.exports = router;
